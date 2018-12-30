@@ -1,0 +1,5 @@
+book_filename: "Survey-quickstart"
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Chapter "
