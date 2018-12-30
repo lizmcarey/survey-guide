@@ -1,5 +1,5 @@
 --- 
-title: "Survey Quickstart Guide"
+title: "A Quick Start Guide to Survey Research"
 author: "Liz Carey"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -7,7 +7,7 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-description: "A quickstart guide on conducting survey research"
+description: "A quick start guide to survey research"
 ---
 
 # Prerequisites
