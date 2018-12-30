@@ -1,6 +1,6 @@
 --- 
 title: "A Quick Start Guide to Survey Research"
-author: "Liz Carey"
+author: "Liz Carey (and hopefully many others)"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
