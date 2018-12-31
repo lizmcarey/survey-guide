@@ -12,7 +12,7 @@ description: "A quick start guide to survey research"
 
 # Welcome to survey research {-}
 
-This book is intended to be a one stop resource for conducting survey research. 
+This book is intended to be a quick resource for conducting survey research. By no means is it intended to be comprehensive of all survey research methodologies.  
 
 # Preface {-}
 
