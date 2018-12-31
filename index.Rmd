@@ -1,0 +1,35 @@
+--- 
+title: "A Quick Start Guide to Survey Research"
+author: "Liz Carey (and hopefully many others)"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "A quick start guide to survey research"
+---
+
+# Welcome to survey research {-}
+
+This book is intended to be a quick resource for conducting survey research. By no means is it intended to be comprehensive of all survey research methodologies.  
+
+# Preface {-}
+
+It can be difficult to find condensed and easy to read resources on survey research.
+
+We developed this book in the hopes of future collaboration among other UX researchers. 
+
+## Outline {-}
+The content of the book will include:  
+
+ * **Chapter 1**
+ * **Chapter 2**
+ 
+## Prerequisites {-}
+
+All you need is an interest in conducting survey research, we'll assume basic knowledge, and hope to include code snippets (python and R) along the way
+ 
+## Acknowledgements {-}
+
+This book wouldn't be possible without the contributions of: 
