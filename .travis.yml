@@ -1,0 +1,27 @@
+
+language: r
+sudo: false
+cache:
+  packages: true
+
+addons:
+  apt:
+    packages:
+    - libgsl0-dev
+    - libxml2-dev
+    - libudunits2-dev
+    - optipng
+    
+script:
+- Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"
+- Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::pdf_book')"
+- Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::epub_book')"
+- Rscript -e 'xfun::optipng()'
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master
