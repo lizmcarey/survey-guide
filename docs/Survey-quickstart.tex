@@ -23,10 +23,14 @@
 }{}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
 \hypersetup{unicode=true,
             pdftitle={A Quick Start Guide to Survey Research},
             pdfauthor={Liz Carey (and hopefully many others)},
-            pdfborder={0 0 0},
+            colorlinks=true,
+            linkcolor=Maroon,
+            citecolor=Blue,
+            urlcolor=Blue,
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{natbib}
@@ -124,7 +128,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2019-01-01}
+  \date{2019-01-02}
 
 \usepackage{booktabs}
 
@@ -132,6 +136,7 @@
 \maketitle
 
 {
+\hypersetup{linkcolor=black}
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
@@ -199,7 +204,7 @@ research goal by asking yourself:
 
 Below is a useful visualization from the Nielsen Norman group on how to
 decide between which qualitative or quantitative methods to answer your
-research goal\citep{nng_method}.
+research goal \citep{nng_method}.
 
 \begin{center}\includegraphics{figs/nng_ux_methods_chart2} \end{center}
 
@@ -220,8 +225,8 @@ This question may be simple at first, but when you start to narrow down
 \chapter{Writing effective survey
 questions}\label{writing-effective-survey-questions}
 
-Effective survey questions garner \emph{consistent} and \emph{reliable}
-results.
+Effective survey questions result in \textbf{consistent} and
+\textbf{reliable} responses.
 
 \chapter{Survey Analysis}\label{analysis}
 
@@ -238,7 +243,22 @@ data.
 
 \subsection{Load the data}\label{load-the-data}
 
-\chapter{Setting up python}\label{python-setup}
+Dowload your raw survey data as a csv and load it into your
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#load necessary packages for analysis}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+
+\CommentTok{#read/store the data as the variable df}
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Preview the data}\label{preview-the-data}
+
+It's important to get a look at the data to spot an errors in uploading,
+etc.
 
 \appendix
 

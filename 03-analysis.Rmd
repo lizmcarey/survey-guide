@@ -10,12 +10,18 @@ Before you can begin looking at the results, you'll need to clean the data.
 
 ### Load the data
 
-Dowload your raw survey data as a csv and load it into your 
+Open your analysis tool of choice and download your raw survey data as a csv and load it into your 
 
 ```{r, eval=FALSE}
+#load necessary packages for analysis
 library(tidyverse)
 
+#read/store the data as the variable df
 df <- read_csv(file)
 
 ```
 
+
+### Preview the data
+
+It's important to get a look at the data to spot an errors in uploading, etc. 
