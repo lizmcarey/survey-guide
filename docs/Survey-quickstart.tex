@@ -243,15 +243,29 @@ data.
 
 \subsection{Load the data}\label{load-the-data}
 
-Dowload your raw survey data as a csv and load it into your
+Open your analysis tool of choice and download your raw survey data as a
+csv and load it into your
+
+\textbf{R version}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#load necessary packages for analysis}
 \KeywordTok{library}\NormalTok{(tidyverse)}
 
-\CommentTok{#read/store the data as the variable df}
+\CommentTok{#read/store the data as the variable df (short for dataframe)}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{python version}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#load necessary modules for analysis}
+\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\CommentTok{#read/store the data as the variable df (short for dataframe)}
+\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read_csv(filename)}
 \end{Highlighting}
 \end{Shaded}
 

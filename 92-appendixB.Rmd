@@ -1,7 +1,7 @@
 # Setting up python {#appendixB}
 
 
-```{python, eval=FALSE}
+```{python, eval=FALSE, python.reticulate = FALSE}
 # Pandas makes working with data tables easier
 import pandas as pd
 

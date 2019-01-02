@@ -12,15 +12,25 @@ Before you can begin looking at the results, you'll need to clean the data.
 
 Open your analysis tool of choice and download your raw survey data as a csv and load it into your 
 
+**R version**
 ```{r, eval=FALSE}
 #load necessary packages for analysis
 library(tidyverse)
 
-#read/store the data as the variable df
+#read/store the data as the variable df (short for dataframe)
 df <- read_csv(file)
 
 ```
 
+**python version**
+```{python, eval=FALSE}
+#load necessary modules for analysis
+import pandas as pd
+
+#read/store the data as the variable df (short for dataframe)
+df = pd.read_csv(filename)
+
+```
 
 ### Preview the data
 

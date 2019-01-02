@@ -155,12 +155,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Before you can begin looking at the results, you’ll need to clean the data.</p>
 <div id="load-the-data" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Load the data</h3>
-<p>Dowload your raw survey data as a csv and load it into your</p>
+<p>Open your analysis tool of choice and download your raw survey data as a csv and load it into your</p>
+<p><strong>R version</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary packages for analysis</span>
 <span class="kw">library</span>(tidyverse)
 
-<span class="co">#read/store the data as the variable df</span>
+<span class="co">#read/store the data as the variable df (short for dataframe)</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file)</code></pre></div>
+<p><strong>python version</strong></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#load necessary modules for analysis</span>
+<span class="im">import</span> pandas <span class="im">as</span> pd
+<span class="co">#read/store the data as the variable df (short for dataframe)</span>
+df <span class="op">=</span> pd.read_csv(filename)</code></pre></div>
 </div>
 <div id="preview-the-data" class="section level3">
 <h3><span class="header-section-number">3.1.2</span> Preview the data</h3>
