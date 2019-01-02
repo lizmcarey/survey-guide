@@ -23,7 +23,7 @@ df <- read_csv(file)
 ```
 
 **python version**
-```{python, eval=FALSE}
+```{r, eval=FALSE}
 #load necessary modules for analysis
 import pandas as pd
 
