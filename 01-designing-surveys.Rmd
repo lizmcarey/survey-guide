@@ -2,10 +2,23 @@
 
 ## What is your research goal? 
 
-Ask yourself:  
+First, establish if a survey is the right method to accomplish your research goal by asking yourself:  
 
  * What do you currently know? 
- * What _don't_ you know? 
+ * What _don't_ you know?  
+ 
+Below is a useful visualization from the Nielsen Norman group on how to decide between which qualitative or quantitative methods to answer your research goal [@nng_method].
+
+```{r echo=FALSE, fig.align='center'}
+knitr::include_graphics("figs/nng_ux_methods_chart2.png")
+
+```
+
+
+Surveys are great for answering the "How many and how much" of what people do and say; surveys are not the best method at understanding the "Why and how to fix" a product problem. 
+
+
+![](figs/nng_ux_methods_chart.png)
 
 ## Who are you studying? 
 

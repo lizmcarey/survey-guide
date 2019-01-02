@@ -11,6 +11,7 @@ addons:
     - libxml2-dev
     - libudunits2-dev
     - optipng
+    - reticulate
     
 script:
 - Rscript -e "bookdown::render_book('index.Rmd', 'bookdown::gitbook')"

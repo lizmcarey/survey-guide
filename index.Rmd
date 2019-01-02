@@ -11,6 +11,7 @@ description: "A quick start guide to survey research"
 ---
 
 # Welcome to survey research {-}
+![](figs/sponge_bob.png)
 
 This book is intended to be a quick resource for conducting survey research. By no means is it intended to be comprehensive of all survey research methodologies.  
 

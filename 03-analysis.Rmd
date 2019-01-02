@@ -2,7 +2,15 @@
 
 After you've fielded your survey, here are the steps to making sense of the data. 
 
+This section assumes you have a laptop set up to work with in either R or python. Head over to the Appendix page if you need help with set up. 
+
 ## Data Cleaning  
 
 Before you can begin looking at the results, you'll need to clean the data. 
+
+### Load the data
+
+```{r}
+
+```
 
