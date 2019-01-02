@@ -2,7 +2,36 @@
 
 After you've fielded your survey, here are the steps to making sense of the data. 
 
+This section assumes you have a laptop set up to work with in either R or python. Head over to the Appendix page if you need help with set up. 
+
 ## Data Cleaning  
 
 Before you can begin looking at the results, you'll need to clean the data. 
 
+### Load the data
+
+Open your analysis tool of choice and download your raw survey data as a csv and load it into your 
+
+**R version**
+```{r, eval=FALSE}
+#load necessary packages for analysis
+library(tidyverse)
+
+#read/store the data as the variable df (short for dataframe)
+df <- read_csv(file)
+
+```
+
+**python version**
+```{r, eval=FALSE}
+#load necessary modules for analysis
+import pandas as pd
+
+#read/store the data as the variable df (short for dataframe)
+df = pd.read_csv(filename)
+
+```
+
+### Preview the data
+
+It's important to get a look at the data to spot an errors in uploading, etc. 

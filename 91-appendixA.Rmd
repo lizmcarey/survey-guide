@@ -1,0 +1,12 @@
+# (APPENDIX) Appendix {-}
+
+# Setting up R {#appendixA}
+
+## Package installation
+
+You'll want to install the following packages: 
+
+```{r, eval = FALSE}
+library(tidyverse)
+```
+
