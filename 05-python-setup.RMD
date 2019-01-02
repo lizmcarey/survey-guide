@@ -1,2 +1,0 @@
-# Setting up python {#python-setup}
-

@@ -10,7 +10,12 @@ Before you can begin looking at the results, you'll need to clean the data.
 
 ### Load the data
 
-```{r}
+Dowload your raw survey data as a csv and load it into your 
+
+```{r, eval=FALSE}
+library(tidyverse)
+
+df <- read_csv(file)
 
 ```
 
