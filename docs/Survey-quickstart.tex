@@ -128,7 +128,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2019-01-02}
+  \date{2019-01-07}
 
 \usepackage{booktabs}
 
@@ -236,6 +236,35 @@ the data.
 This section assumes you have a laptop set up to work with in either R
 or python. Head over to the Appendix page if you need help with set up.
 
+\section{Organize your workspace}\label{organize-your-workspace}
+
+Before beginning any analysis, you'll want to set up a reproducible
+workflow in your workspace. Below is an adapted suggestion on how to
+organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln
+Mullen \citep{reproducible_workflow}
+
+\begin{verbatim}
+project
+|- DESCRIPTION          # project metadata and dependencies 
+|- README.md            # top-level description of content and guide to users
+|
+|- data/                # data files used 
+|  +- raw_data.csv      # data files in open formats such as TXT, CSV, TSV, etc.
+|  +- cleaned_data.csv  # data files that have been cleaned, merged, etc that you'll use for survey analysis
+|
+|- analysis/            # any programmatic code
+|  +- my_report.Rmd     # R markdown file with narrative text interwoven with code chunks 
+|  +- makefile          # builds a PDF/HTML/DOCX file from the Rmd, code, and data files
+|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation 
+|
+|- R/                     
+|  +- my_functions.R    # custom R functions that are used more than once throughout the project
+|
+|- man/
+|  +- my_functions.Rd   # documentation for the R functions (auto-generated when using devtools)
+|
+\end{verbatim}
+
 \section{Data Cleaning}\label{data-cleaning}
 
 Before you can begin looking at the results, you'll need to clean the
@@ -243,8 +272,8 @@ data.
 
 \subsection{Load the data}\label{load-the-data}
 
-Open your analysis tool of choice and download your raw survey data as a
-csv and load it into your
+Download your raw survey data as a csv and load it into your your
+analysis tool of choice (e.g.~Ipython notebook or Rstudio)
 
 \textbf{R version}
 
@@ -263,9 +292,10 @@ csv and load it into your
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#load necessary modules for analysis}
-\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\NormalTok{import pandas as pd}
+
 \CommentTok{#read/store the data as the variable df (short for dataframe)}
-\NormalTok{df }\OperatorTok{=}\NormalTok{ pd.read_csv(filename)}
+\NormalTok{df =}\StringTok{ }\KeywordTok{pd.read_csv}\NormalTok{(filename)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -294,15 +324,18 @@ You'll want to install the following packages:
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Pandas makes working with data tables easier}
-\ImportTok{import}\NormalTok{ pandas }\ImportTok{as}\NormalTok{ pd}
+\NormalTok{import pandas as pd}
+
 \CommentTok{# Numpy is a library for working with Arrays}
-\ImportTok{import}\NormalTok{ numpy }\ImportTok{as}\NormalTok{ np}
+\NormalTok{import numpy as np}
+
 \CommentTok{# Module for plotting graphs}
-\ImportTok{import}\NormalTok{ matplotlib.pyplot }\ImportTok{as}\NormalTok{ plt}
-\ImportTok{import}\NormalTok{ seaborn }\ImportTok{as}\NormalTok{ sns}
+\NormalTok{import matplotlib.pyplot as plt}
+\NormalTok{import seaborn as sns}
+
 \CommentTok{# SciPy implements many different numerical algorithms}
-\ImportTok{import}\NormalTok{ scipy.stats }\ImportTok{as}\NormalTok{ stats}
-\ImportTok{import}\NormalTok{ collections}
+\NormalTok{import scipy.stats as stats}
+\NormalTok{import collections}
 \end{Highlighting}
 \end{Shaded}
 

@@ -27,7 +27,7 @@ This book is intended to be a quick resource for conducting survey research. By 
 
 # Preface {-}
 
-It can be difficult to find condensed and easy to read resources on survey research.
+Hopefully you'll find this book to be a condensed and easy to read resource on survey research.
 
 We developed this book in the hopes of future collaboration among other UX researchers. 
 
@@ -39,7 +39,7 @@ The content of the book will include:
  
 ## Prerequisites {-}
 
-All you need is an interest in conducting survey research, we'll assume basic knowledge, and hope to include code snippets (python and R) along the way
+All you need is an interest in conducting survey research and basic data analysis, we'll include code snippets (python and R) along the way. 
  
 ## Acknowledgements {-}
 

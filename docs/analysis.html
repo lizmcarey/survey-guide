@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-02">
+<meta name="date" content="2019-01-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -115,9 +115,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2" data-path="writing-effective-survey-questions.html"><a href="writing-effective-survey-questions.html"><i class="fa fa-check"></i><b>2</b> Writing effective survey questions</a></li>
 <li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Survey Analysis</a><ul>
-<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#data-cleaning"><i class="fa fa-check"></i><b>3.1</b> Data Cleaning</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Load the data</a></li>
-<li class="chapter" data-level="3.1.2" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.1.2</b> Preview the data</a></li>
+<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#organize-your-workspace"><i class="fa fa-check"></i><b>3.1</b> Organize your workspace</a></li>
+<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#data-cleaning"><i class="fa fa-check"></i><b>3.2</b> Data Cleaning</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.2.1</b> Load the data</a></li>
+<li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.2</b> Preview the data</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -150,12 +151,36 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">Chapter 3</span> Survey Analysis</h1>
 <p>After you’ve fielded your survey, here are the steps to making sense of the data.</p>
 <p>This section assumes you have a laptop set up to work with in either R or python. Head over to the Appendix page if you need help with set up.</p>
+<div id="organize-your-workspace" class="section level2">
+<h2><span class="header-section-number">3.1</span> Organize your workspace</h2>
+<p>Before beginning any analysis, you’ll want to set up a reproducible workflow in your workspace. Below is an adapted suggestion on how to organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln Mullen <span class="citation">(Ben Marwick <a href="#ref-reproducible_workflow">2018</a>)</span></p>
+<pre><code>project
+|- DESCRIPTION          # project metadata and dependencies 
+|- README.md            # top-level description of content and guide to users
+|
+|- data/                # data files used 
+|  +- raw_data.csv      # data files in open formats such as TXT, CSV, TSV, etc.
+|  +- cleaned_data.csv  # data files that have been cleaned, merged, etc that you&#39;ll use for survey analysis
+|
+|- analysis/            # any programmatic code
+|  +- my_report.Rmd     # R markdown file with narrative text interwoven with code chunks 
+|  +- makefile          # builds a PDF/HTML/DOCX file from the Rmd, code, and data files
+|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation 
+|
+|- R/                     
+|  +- my_functions.R    # custom R functions that are used more than once throughout the project
+|
+|- man/
+|  +- my_functions.Rd   # documentation for the R functions (auto-generated when using devtools)
+|
+</code></pre>
+</div>
 <div id="data-cleaning" class="section level2">
-<h2><span class="header-section-number">3.1</span> Data Cleaning</h2>
+<h2><span class="header-section-number">3.2</span> Data Cleaning</h2>
 <p>Before you can begin looking at the results, you’ll need to clean the data.</p>
 <div id="load-the-data" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Load the data</h3>
-<p>Open your analysis tool of choice and download your raw survey data as a csv and load it into your</p>
+<h3><span class="header-section-number">3.2.1</span> Load the data</h3>
+<p>Download your raw survey data as a csv and load it into your your analysis tool of choice (e.g. Ipython notebook or Rstudio)</p>
 <p><strong>R version</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary packages for analysis</span>
 <span class="kw">library</span>(tidyverse)
@@ -163,13 +188,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#read/store the data as the variable df (short for dataframe)</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file)</code></pre></div>
 <p><strong>python version</strong></p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#load necessary modules for analysis</span>
-<span class="im">import</span> pandas <span class="im">as</span> pd
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary modules for analysis</span>
+import pandas as pd
+
 <span class="co">#read/store the data as the variable df (short for dataframe)</span>
-df <span class="op">=</span> pd.read_csv(filename)</code></pre></div>
+df =<span class="st"> </span><span class="kw">pd.read_csv</span>(filename)</code></pre></div>
 </div>
 <div id="preview-the-data" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Preview the data</h3>
+<h3><span class="header-section-number">3.2.2</span> Preview the data</h3>
 <p>It’s important to get a look at the data to spot an errors in uploading, etc.</p>
 
 </div>
@@ -178,6 +204,12 @@ df <span class="op">=</span> pd.read_csv(filename)</code></pre></div>
 
 
 
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-reproducible_workflow">
+<p>Ben Marwick, Lincoln Mullen, Carl Boettiger. 2018. “Packaging Data Analytical Work Reproducibly Using R (and Friends).” <em>PeerJ</em>, March. <a href="https://peerj.com/preprints/3192/" class="uri">https://peerj.com/preprints/3192/</a>.</p>
+</div>
+</div>
             </section>
 
           </div>

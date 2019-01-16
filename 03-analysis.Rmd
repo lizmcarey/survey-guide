@@ -4,18 +4,65 @@ After you've fielded your survey, here are the steps to making sense of the data
 
 This section assumes you have a laptop set up to work with in either R or python. Head over to the Appendix page if you need help with set up. 
 
+## Organize your workspace
+
+Before beginning any analysis, you'll want to set up a reproducible workflow. Below is an adapted suggestion on how to organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln Mullen  [@reproducible_workflow]. Keeping your workspace organized is the best way for you and others to understand and reproduce your analysis. 
+
+```
+project
+|- DESCRIPTION          # project metadata and dependencies 
+|- README.md            # top-level description of content and guide to users
+|
+|- data/                # data files used 
+|  +- raw_data.csv      # data files in open formats such as TXT, CSV, TSV, etc.
+|  +- cleaned_data.csv  # data files that have been cleaned, merged, etc that you'll use for survey analysis
+|
+|- analysis/            # any programmatic code
+|  +- my_report.Rmd     # R markdown file with narrative text interwoven with code chunks 
+|  +- makefile          # builds a PDF/HTML/DOCX file from the Rmd, code, and data files
+|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation
+|  +- figures/          # saved outputs of your figures
+|
+|- R/                     
+|  +- my_functions.R    # custom R functions that are used more than once throughout the project
+|
+|- man/
+|  +- my_functions.Rd   # documentation for the R functions (auto-generated when using devtools)
+|
+
+```
+
+Example code to set up workflow
+
+```{r, eval=FALSE}
+#List the directory names
+folder_names <- c("data", 
+                    "data/raw", 
+                    "data/clean", 
+                  "analysis", 
+                    "analysis/scripts", 
+                     "analysis/figures", 
+                  "R")
+
+#Create the directories
+sapply(folder_names, dir.create)
+```
+
+
+
 ## Data Cleaning  
 
-Before you can begin looking at the results, you'll need to clean the data. 
+Before you can begin looking at the results, you'll need to clean the data. By "cleaning" the data, we mean edited the raw file into a format that will make the analysis valid and easier. 
 
 ### Load the data
 
-Open your analysis tool of choice and download your raw survey data as a csv and load it into your 
+Download your raw survey data as a csv and load it into your your analysis tool of choice (e.g. Ipython notebook or Rstudio)
 
 **R version**
 ```{r, eval=FALSE}
 #load necessary packages for analysis
-library(tidyverse)
+library(tidyverse)        #contains all the library packages to manipulate and transform data
+library(summarytools)     #shortcut tools to visualize summaries of the data
 
 #read/store the data as the variable df (short for dataframe)
 df <- read_csv(file)
