@@ -82,7 +82,7 @@ df = pd.read_csv(filename)
 
 ### Loading Qualtrics data
 
-When you download a csv from Qualtrics, it will come with a few extra rows you don't need. Here are some automated scripts you can add to your makefile to speed up your work =flow 
+When you download a csv from Qualtrics, it will come with a few extra rows you don't need. Here are some automated scripts you can add to your makefile to speed up your workflow 
 
 **R version manual**
 ```{r, eval=FALSE}
@@ -105,12 +105,14 @@ question_bank <- read_csv(file, n_max=1) %>%  #read in the first row of file
 **R version programmatic**
 
 ```{r, eval=FALSE}
+#function to load qualtrics csv and remove extra rows
 load_qualtrics_csv <- function(file) {
   df_names <- read_csv(file, n_max = 0) %>% names()
   
   df <- read_csv(file, col_names = df_names, skip = 3)
 }
 
+#function to store questions
 get_questions <- function(file) {
   qb <- read_csv(file, n_max = 1) %>% 
         select(starts_with("Q")) %>% 
