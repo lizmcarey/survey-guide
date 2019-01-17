@@ -104,11 +104,11 @@ question_bank <- read_csv(file, n_max=1) %>%  #read in the first row of file
 
 **R version programmatic**
 
-```{r}
+```{r, eval=FALSE}
 load_qualtrics_csv <- function(file) {
-  squirrel <- read_csv(file, n_max = 0) %>% names()
+  df_names <- read_csv(file, n_max = 0) %>% names()
   
-  squirrel_2 <- read_csv(file, col_names = df_names, skip = 3)
+  df <- read_csv(file, col_names = df_names, skip = 3)
 }
 
 get_questions <- function(file) {
