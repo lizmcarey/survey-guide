@@ -228,9 +228,9 @@ question_bank &lt;-<span class="st"> </span><span class="kw">read_csv</span>(fil
 <span class="st">                 </span><span class="kw">gather</span>(key, question_text) <span class="co">#move data from wide to long</span></code></pre></div>
 <p><strong>R version programmatic</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_qualtrics_csv &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
-  squirrel &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
+  df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
   
-  squirrel_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">col_names =</span> df_names, <span class="dt">skip =</span> <span class="dv">3</span>)
+  df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">col_names =</span> df_names, <span class="dt">skip =</span> <span class="dv">3</span>)
 }
 
 get_questions &lt;-<span class="st"> </span><span class="cf">function</span>(file) {

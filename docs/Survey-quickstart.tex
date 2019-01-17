@@ -351,9 +351,9 @@ makefile to speed up your work =flow
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{load_qualtrics_csv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
-\NormalTok{  squirrel <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
+\NormalTok{  df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
   
-\NormalTok{  squirrel_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{col_names =}\NormalTok{ df_names, }\DataTypeTok{skip =} \DecValTok{3}\NormalTok{)}
+\NormalTok{  df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{col_names =}\NormalTok{ df_names, }\DataTypeTok{skip =} \DecValTok{3}\NormalTok{)}
 \NormalTok{\}}
 
 \NormalTok{get_questions <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
