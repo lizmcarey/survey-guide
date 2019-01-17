@@ -117,8 +117,10 @@ get_questions <- function(file) {
         gather(key, question_text)
 }
 
+#Use function to read in survey file, and skip first 3 lines
 df <- load_qualtrics_csv(file)
 
+#Use function to store question wording
 question_bank <- get_questions(file)
 ```
 

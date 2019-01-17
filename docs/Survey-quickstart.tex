@@ -346,8 +346,10 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 \StringTok{        }\KeywordTok{gather}\NormalTok{(key, question_text)}
 \NormalTok{\}}
 
+\CommentTok{#Use function to read in survey file, and skip first 3 lines}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{load_qualtrics_csv}\NormalTok{(file)}
 
+\CommentTok{#Use function to store question wording}
 \NormalTok{question_bank <-}\StringTok{ }\KeywordTok{get_questions}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}

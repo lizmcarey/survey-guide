@@ -268,8 +268,10 @@ get_questions &lt;-<span class="st"> </span><span class="cf">function</span>(fil
 <span class="st">        </span><span class="kw">gather</span>(key, question_text)
 }
 
+<span class="co">#Use function to read in survey file, and skip first 3 lines</span>
 df &lt;-<span class="st"> </span><span class="kw">load_qualtrics_csv</span>(file)
 
+<span class="co">#Use function to store question wording</span>
 question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span>(file)</code></pre>
 </div>
 <div id="preview-the-data" class="section level3">
