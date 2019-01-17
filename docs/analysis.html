@@ -212,7 +212,7 @@ df =<span class="st"> </span><span class="kw">pd.read_csv</span>(filename)</code
 </div>
 <div id="loading-qualtrics-data" class="section level3">
 <h3><span class="header-section-number">3.2.2</span> Loading Qualtrics data</h3>
-<p>When you download a csv from Qualtrics, it will come with a few extra rows you don’t need. Here are some automated scripts you can add to your makefile to speed up your work =flow</p>
+<p>When you download a csv from Qualtrics, it will come with a few extra rows you don’t need. Here are some automated scripts you can add to your makefile to speed up your workflow</p>
 <p><strong>R version manual</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Store the column names by reading in the column header</span>
 df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
@@ -227,20 +227,24 @@ question_bank &lt;-<span class="st"> </span><span class="kw">read_csv</span>(fil
 <span class="st">                 </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#select columns that start with Q</span>
 <span class="st">                 </span><span class="kw">gather</span>(key, question_text) <span class="co">#move data from wide to long</span></code></pre></div>
 <p><strong>R version programmatic</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">load_qualtrics_csv &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#function to load qualtrics csv and remove extra rows</span>
+load_qualtrics_csv &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
   df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
   
   df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">col_names =</span> df_names, <span class="dt">skip =</span> <span class="dv">3</span>)
 }
 
+<span class="co">#function to store questions</span>
 get_questions &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
   qb &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">        </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">        </span><span class="kw">gather</span>(key, question_text)
 }
 
+<span class="co">#Use function to read in survey file, and skip first 3 lines</span>
 df &lt;-<span class="st"> </span><span class="kw">load_qualtrics_csv</span>(file)
 
+<span class="co">#Use function to store question wording</span>
 question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span>(file)</code></pre></div>
 </div>
 <div id="preview-the-data" class="section level3">

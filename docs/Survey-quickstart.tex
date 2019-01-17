@@ -325,7 +325,7 @@ analysis tool of choice (e.g.~Ipython notebook or Rstudio)
 
 When you download a csv from Qualtrics, it will come with a few extra
 rows you don't need. Here are some automated scripts you can add to your
-makefile to speed up your work =flow
+makefile to speed up your workflow
 
 \textbf{R version manual}
 
@@ -350,20 +350,24 @@ makefile to speed up your work =flow
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{#function to load qualtrics csv and remove extra rows}
 \NormalTok{load_qualtrics_csv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
 \NormalTok{  df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
   
 \NormalTok{  df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{col_names =}\NormalTok{ df_names, }\DataTypeTok{skip =} \DecValTok{3}\NormalTok{)}
 \NormalTok{\}}
 
+\CommentTok{#function to store questions}
 \NormalTok{get_questions <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
 \NormalTok{  qb <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{        }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Q"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{        }\KeywordTok{gather}\NormalTok{(key, question_text)}
 \NormalTok{\}}
 
+\CommentTok{#Use function to read in survey file, and skip first 3 lines}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{load_qualtrics_csv}\NormalTok{(file)}
 
+\CommentTok{#Use function to store question wording}
 \NormalTok{question_bank <-}\StringTok{ }\KeywordTok{get_questions}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}
