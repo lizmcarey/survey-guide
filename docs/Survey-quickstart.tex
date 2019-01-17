@@ -129,7 +129,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-01-16}
+    \date{2019-01-17}
 
 \usepackage{booktabs}
 
@@ -252,11 +252,11 @@ project
 |
 \end{verbatim}
 
-Example code to set up workflow
+\textbf{R version}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#List the directory names}
+\CommentTok{#List the directory names you want to create}
 \NormalTok{folder_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data"}\NormalTok{, }
                     \StringTok{"data/raw"}\NormalTok{, }
                     \StringTok{"data/clean"}\NormalTok{, }
@@ -289,6 +289,7 @@ Download your raw survey data as a csv and load it into your your analysis tool 
 \KeywordTok{library}\NormalTok{(summarytools)     }\CommentTok{#shortcut tools to visualize summaries of the data}
 
 \CommentTok{#read/store the data as the variable df (short for dataframe)}
+\CommentTok{#replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}
@@ -302,6 +303,52 @@ Download your raw survey data as a csv and load it into your your analysis tool 
 
 \CommentTok{#read/store the data as the variable df (short for dataframe)}
 \NormalTok{df =}\StringTok{ }\KeywordTok{pd.read_csv}\NormalTok{(filename)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{loading-qualtrics-data}{%
+\subsection{Loading Qualtrics data}\label{loading-qualtrics-data}}
+
+When you download a csv from Qualtrics, it will come with a few extra rows you don't need. Here are some automated scripts you can add to your makefile to speed up your work =flow
+
+\textbf{R version manual}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Store the column names by reading in the column header}
+\NormalTok{df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
+
+\CommentTok{#Read the entire file,}
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }
+               \DataTypeTok{col_names =}\NormalTok{ df_names, }\CommentTok{#use df_names to title the columns}
+               \DataTypeTok{skip =} \DecValTok{3}\NormalTok{) }\CommentTok{#skip the first three lines}
+
+\CommentTok{#store the question names}
+\NormalTok{question_bank <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }\CommentTok{#read in the first row of file}
+\StringTok{                 }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Q"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{#select columns that start with Q}
+\StringTok{                 }\KeywordTok{gather}\NormalTok{(key, question_text) }\CommentTok{#move data from wide to long}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{R version programmatic}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load_qualtrics_csv <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
+\NormalTok{  df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
+  
+\NormalTok{  df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{col_names =}\NormalTok{ df_names, }\DataTypeTok{skip =} \DecValTok{3}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{get_questions <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(file) \{}
+\NormalTok{  qb <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max =} \DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{        }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Q"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{        }\KeywordTok{gather}\NormalTok{(key, question_text)}
+\NormalTok{\}}
+
+\NormalTok{df <-}\StringTok{ }\KeywordTok{load_qualtrics_csv}\NormalTok{(file)}
+
+\NormalTok{question_bank <-}\StringTok{ }\KeywordTok{get_questions}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -346,12 +393,6 @@ You'll want to install the following packages:
 \CommentTok{# SciPy implements many different numerical algorithms}
 \NormalTok{import scipy.stats as stats}
 \NormalTok{import collections}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(tidyverse)}
 \end{Highlighting}
 \end{Shaded}
 

@@ -32,10 +32,10 @@ project
 
 ```
 
-Example code to set up workflow
 
+**R version**
 ```{r, eval=FALSE}
-#List the directory names
+#List the directory names you want to create
 folder_names <- c("data", 
                     "data/raw", 
                     "data/clean", 
@@ -65,6 +65,7 @@ library(tidyverse)        #contains all the library packages to manipulate and t
 library(summarytools)     #shortcut tools to visualize summaries of the data
 
 #read/store the data as the variable df (short for dataframe)
+#replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set
 df <- read_csv(file)
 
 ```
@@ -77,6 +78,48 @@ import pandas as pd
 #read/store the data as the variable df (short for dataframe)
 df = pd.read_csv(filename)
 
+```
+
+### Loading Qualtrics data
+
+When you download a csv from Qualtrics, it will come with a few extra rows you don't need. Here are some automated scripts you can add to your makefile to speed up your work =flow 
+
+**R version manual**
+```{r, eval=FALSE}
+
+#Store the column names by reading in the column header
+df_names <- read_csv(file, n_max=0) %>% names()
+
+#Read the entire file,
+df <- read_csv(file, 
+               col_names = df_names, #use df_names to title the columns
+               skip = 3) #skip the first three lines
+
+#store the question names
+question_bank <- read_csv(file, n_max=1) %>%  #read in the first row of file
+                 select(starts_with("Q")) %>% #select columns that start with Q
+                 gather(key, question_text) #move data from wide to long
+
+```
+
+**R version programmatic**
+
+```{r, eval=FALSE}
+load_qualtrics_csv <- function(file) {
+  df_names <- read_csv(file, n_max = 0) %>% names()
+  
+  df <- read_csv(file, col_names = df_names, skip = 3)
+}
+
+get_questions <- function(file) {
+  qb <- read_csv(file, n_max = 1) %>% 
+        select(starts_with("Q")) %>% 
+        gather(key, question_text)
+}
+
+df <- load_qualtrics_csv(file)
+
+question_bank <- get_questions(file)
 ```
 
 ### Preview the data

@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-16">
+<meta name="date" content="2019-01-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -147,7 +147,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#organize-your-workspace"><i class="fa fa-check"></i><b>3.1</b> Organize your workspace</a></li>
 <li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#data-cleaning"><i class="fa fa-check"></i><b>3.2</b> Data Cleaning</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.2.1</b> Load the data</a></li>
-<li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.2</b> Preview the data</a></li>
+<li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#loading-qualtrics-data"><i class="fa fa-check"></i><b>3.2.2</b> Loading Qualtrics data</a></li>
+<li class="chapter" data-level="3.2.3" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.3</b> Preview the data</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -204,8 +205,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 |  +- my_functions.Rd   # documentation for the R functions (auto-generated when using devtools)
 |
 </code></pre>
-<p>Example code to set up workflow</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#List the directory names</span>
+<p><strong>R version</strong></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#List the directory names you want to create</span>
 folder_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data&quot;</span>, 
                     <span class="st">&quot;data/raw&quot;</span>, 
                     <span class="st">&quot;data/clean&quot;</span>, 
@@ -229,6 +230,7 @@ folder_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class
 <span class="kw">library</span>(summarytools)     <span class="co">#shortcut tools to visualize summaries of the data</span>
 
 <span class="co">#read/store the data as the variable df (short for dataframe)</span>
+<span class="co">#replace &quot;file&quot; with &quot;https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv&quot; to download the survey data set</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file)</code></pre>
 <p><strong>python version</strong></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary modules for analysis</span>
@@ -237,8 +239,41 @@ import pandas as pd
 <span class="co">#read/store the data as the variable df (short for dataframe)</span>
 df =<span class="st"> </span><span class="kw">pd.read_csv</span>(filename)</code></pre>
 </div>
+<div id="loading-qualtrics-data" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Loading Qualtrics data</h3>
+<p>When you download a csv from Qualtrics, it will come with a few extra rows you don’t need. Here are some automated scripts you can add to your makefile to speed up your work =flow</p>
+<p><strong>R version manual</strong></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Store the column names by reading in the column header</span>
+df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
+
+<span class="co">#Read the entire file,</span>
+df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, 
+               <span class="dt">col_names =</span> df_names, <span class="co">#use df_names to title the columns</span>
+               <span class="dt">skip =</span> <span class="dv">3</span>) <span class="co">#skip the first three lines</span>
+
+<span class="co">#store the question names</span>
+question_bank &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#read in the first row of file</span>
+<span class="st">                 </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#select columns that start with Q</span>
+<span class="st">                 </span><span class="kw">gather</span>(key, question_text) <span class="co">#move data from wide to long</span></code></pre>
+<p><strong>R version programmatic</strong></p>
+<pre class="sourceCode r"><code class="sourceCode r">load_qualtrics_csv &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
+  df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
+  
+  df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">col_names =</span> df_names, <span class="dt">skip =</span> <span class="dv">3</span>)
+}
+
+get_questions &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
+  qb &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">        </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">        </span><span class="kw">gather</span>(key, question_text)
+}
+
+df &lt;-<span class="st"> </span><span class="kw">load_qualtrics_csv</span>(file)
+
+question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span>(file)</code></pre>
+</div>
 <div id="preview-the-data" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Preview the data</h3>
+<h3><span class="header-section-number">3.2.3</span> Preview the data</h3>
 <p>It’s important to get a look at the data to spot an errors in uploading, etc.</p>
 
 </div>

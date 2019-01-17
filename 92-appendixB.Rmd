@@ -17,6 +17,3 @@ import scipy.stats as stats
 import collections
 ```
 
-```{r, eval=FALSE}
-library(tidyverse)
-```
