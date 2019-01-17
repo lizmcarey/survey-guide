@@ -246,7 +246,7 @@ df =<span class="st"> </span><span class="kw">pd.read_csv</span>(filename)</code
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Store the column names by reading in the column header</span>
 df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
 
-<span class="co">#Read the entire file,</span>
+<span class="co">#Read the entire file</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, 
                <span class="dt">col_names =</span> df_names, <span class="co">#use df_names to title the columns</span>
                <span class="dt">skip =</span> <span class="dv">3</span>) <span class="co">#skip the first three lines</span>
@@ -279,6 +279,10 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 <div id="preview-the-data" class="section level3">
 <h3><span class="header-section-number">3.2.3</span> Preview the data</h3>
 <p>It’s important to get a look at the data to spot an errors in uploading, etc.</p>
+<p>You’ll want to check for:
+* Total number of observations/rows
+* Drop off/Abandon rate
+* Survey completion time</p>
 
 </div>
 </div>

@@ -318,7 +318,7 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 \CommentTok{#Store the column names by reading in the column header}
 \NormalTok{df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
 
-\CommentTok{#Read the entire file,}
+\CommentTok{#Read the entire file}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }
                \DataTypeTok{col_names =}\NormalTok{ df_names, }\CommentTok{#use df_names to title the columns}
                \DataTypeTok{skip =} \DecValTok{3}\NormalTok{) }\CommentTok{#skip the first three lines}
@@ -360,6 +360,11 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 \subsection{Preview the data}\label{preview-the-data}}
 
 It's important to get a look at the data to spot an errors in uploading, etc.
+
+You'll want to check for:
+* Total number of observations/rows
+* Drop off/Abandon rate
+* Survey completion time
 
 \hypertarget{appendix-appendix}{%
 \appendix}

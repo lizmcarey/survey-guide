@@ -90,7 +90,7 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 #Store the column names by reading in the column header
 df_names <- read_csv(file, n_max=0) %>% names()
 
-#Read the entire file,
+#Read the entire file
 df <- read_csv(file, 
                col_names = df_names, #use df_names to title the columns
                skip = 3) #skip the first three lines
@@ -129,3 +129,8 @@ question_bank <- get_questions(file)
 ### Preview the data
 
 It's important to get a look at the data to spot an errors in uploading, etc. 
+
+You'll want to check for: 
+* Total number of observations/rows
+* Drop off/Abandon rate 
+* Survey completion time
