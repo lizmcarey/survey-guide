@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-07">
+<meta name="date" content="2019-01-16">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -153,7 +153,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>This section assumes you have a laptop set up to work with in either R or python. Head over to the Appendix page if you need help with set up.</p>
 <div id="organize-your-workspace" class="section level2">
 <h2><span class="header-section-number">3.1</span> Organize your workspace</h2>
-<p>Before beginning any analysis, you’ll want to set up a reproducible workflow in your workspace. Below is an adapted suggestion on how to organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln Mullen <span class="citation">(Ben Marwick <a href="#ref-reproducible_workflow">2018</a>)</span></p>
+<p>Before beginning any analysis, you’ll want to set up a reproducible workflow. Below is an adapted suggestion on how to organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln Mullen <span class="citation">(Ben Marwick <a href="#ref-reproducible_workflow">2018</a>)</span>. Keeping your workspace organized is the best way for you and others to understand and reproduce your analysis.</p>
 <pre><code>project
 |- DESCRIPTION          # project metadata and dependencies 
 |- README.md            # top-level description of content and guide to users
@@ -165,7 +165,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 |- analysis/            # any programmatic code
 |  +- my_report.Rmd     # R markdown file with narrative text interwoven with code chunks 
 |  +- makefile          # builds a PDF/HTML/DOCX file from the Rmd, code, and data files
-|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation 
+|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation
+|  +- figures/          # saved outputs of your figures
 |
 |- R/                     
 |  +- my_functions.R    # custom R functions that are used more than once throughout the project
@@ -174,18 +175,32 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 |  +- my_functions.Rd   # documentation for the R functions (auto-generated when using devtools)
 |
 </code></pre>
+<p>Example code to set up workflow</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#List the directory names</span>
+folder_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;data&quot;</span>, 
+                    <span class="st">&quot;data/raw&quot;</span>, 
+                    <span class="st">&quot;data/clean&quot;</span>, 
+                  <span class="st">&quot;analysis&quot;</span>, 
+                    <span class="st">&quot;analysis/scripts&quot;</span>, 
+                     <span class="st">&quot;analysis/figures&quot;</span>, 
+                  <span class="st">&quot;R&quot;</span>)
+
+<span class="co">#Create the directories</span>
+<span class="kw">sapply</span>(folder_names, dir.create)</code></pre></div>
 </div>
 <div id="data-cleaning" class="section level2">
 <h2><span class="header-section-number">3.2</span> Data Cleaning</h2>
-<p>Before you can begin looking at the results, you’ll need to clean the data.</p>
+<p>Before you can begin looking at the results, you’ll need to clean the data. By “cleaning” the data, we mean edited the raw file into a format that will make the analysis valid and easier.</p>
 <div id="load-the-data" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Load the data</h3>
 <p>Download your raw survey data as a csv and load it into your your analysis tool of choice (e.g. Ipython notebook or Rstudio)</p>
 <p><strong>R version</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary packages for analysis</span>
-<span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(tidyverse)        <span class="co">#contains all the library packages to manipulate and transform data</span>
+<span class="kw">library</span>(summarytools)     <span class="co">#shortcut tools to visualize summaries of the data</span>
 
 <span class="co">#read/store the data as the variable df (short for dataframe)</span>
+<span class="co">#replace &quot;file&quot; with &quot;https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv&quot; to download the survey data set</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file)</code></pre></div>
 <p><strong>python version</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary modules for analysis</span>

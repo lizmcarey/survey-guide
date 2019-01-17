@@ -128,7 +128,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2019-01-07}
+  \date{2019-01-16}
 
 \usepackage{booktabs}
 
@@ -156,8 +156,8 @@ research methodologies.
 \chapter*{Preface}\label{preface}
 \addcontentsline{toc}{chapter}{Preface}
 
-It can be difficult to find condensed and easy to read resources on
-survey research.
+Hopefully you'll find this book to be a condensed and easy to read
+resource on survey research.
 
 We developed this book in the hopes of future collaboration among other
 UX researchers.
@@ -178,9 +178,8 @@ The content of the book will include:
 \section*{Prerequisites}\label{prerequisites}
 \addcontentsline{toc}{section}{Prerequisites}
 
-All you need is an interest in conducting survey research, we'll assume
-basic knowledge, and hope to include code snippets (python and R) along
-the way
+All you need is an interest in conducting survey research and basic data
+analysis, we'll include code snippets (python and R) along the way.
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
@@ -239,9 +238,10 @@ or python. Head over to the Appendix page if you need help with set up.
 \section{Organize your workspace}\label{organize-your-workspace}
 
 Before beginning any analysis, you'll want to set up a reproducible
-workflow in your workspace. Below is an adapted suggestion on how to
-organize your workspace from Ben Marwick, Carl Boettiger, and Lincoln
-Mullen \citep{reproducible_workflow}
+workflow. Below is an adapted suggestion on how to organize your
+workspace from Ben Marwick, Carl Boettiger, and Lincoln Mullen
+\citep{reproducible_workflow}. Keeping your workspace organized is the
+best way for you and others to understand and reproduce your analysis.
 
 \begin{verbatim}
 project
@@ -255,7 +255,8 @@ project
 |- analysis/            # any programmatic code
 |  +- my_report.Rmd     # R markdown file with narrative text interwoven with code chunks 
 |  +- makefile          # builds a PDF/HTML/DOCX file from the Rmd, code, and data files
-|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation 
+|  +- scripts/          # code files (R, shell, etc.) used for data cleaning, analysis and visualisation
+|  +- figures/          # saved outputs of your figures
 |
 |- R/                     
 |  +- my_functions.R    # custom R functions that are used more than once throughout the project
@@ -265,10 +266,29 @@ project
 |
 \end{verbatim}
 
+Example code to set up workflow
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#List the directory names}
+\NormalTok{folder_names <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"data"}\NormalTok{, }
+                    \StringTok{"data/raw"}\NormalTok{, }
+                    \StringTok{"data/clean"}\NormalTok{, }
+                  \StringTok{"analysis"}\NormalTok{, }
+                    \StringTok{"analysis/scripts"}\NormalTok{, }
+                     \StringTok{"analysis/figures"}\NormalTok{, }
+                  \StringTok{"R"}\NormalTok{)}
+
+\CommentTok{#Create the directories}
+\KeywordTok{sapply}\NormalTok{(folder_names, dir.create)}
+\end{Highlighting}
+\end{Shaded}
+
 \section{Data Cleaning}\label{data-cleaning}
 
 Before you can begin looking at the results, you'll need to clean the
-data.
+data. By ``cleaning'' the data, we mean edited the raw file into a
+format that will make the analysis valid and easier.
 
 \subsection{Load the data}\label{load-the-data}
 
@@ -280,9 +300,11 @@ analysis tool of choice (e.g.~Ipython notebook or Rstudio)
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{#load necessary packages for analysis}
-\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(tidyverse)        }\CommentTok{#contains all the library packages to manipulate and transform data}
+\KeywordTok{library}\NormalTok{(summarytools)     }\CommentTok{#shortcut tools to visualize summaries of the data}
 
 \CommentTok{#read/store the data as the variable df (short for dataframe)}
+\CommentTok{#replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}
@@ -336,12 +358,6 @@ You'll want to install the following packages:
 \CommentTok{# SciPy implements many different numerical algorithms}
 \NormalTok{import scipy.stats as stats}
 \NormalTok{import collections}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(tidyverse)}
 \end{Highlighting}
 \end{Shaded}
 
