@@ -12,7 +12,25 @@ description: "A quick start guide to survey research"
 
 ---
 
-```{r include=FALSE}
+```{r set-options, include=FALSE}
+
+# CRAN packages needed
+needed_CRAN_pkgs <- c(
+  # Data packages:
+  "fivethirtyeight", "gapminder", 
+  
+  # Explicitly used packages:
+  "tidyverse", "rmarkdown", "knitr", "janitor", "skimr",
+  "infer", "moderndive", "lubridate", "summarytools", "charlatan", "glue"
+  
+  ) 
+
+new_pkgs <- needed_CRAN_pkgs[!(needed_CRAN_pkgs %in% installed.packages())]
+if(length(new_pkgs)) {
+  install.packages(new_pkgs, repos = "http://cran.rstudio.com")
+}
+
+
 # automatically create a bib database for R packages
 knitr::write_bib(c(
   .packages(), 'bookdown', 'knitr', 'rmarkdown', 'rmallet'

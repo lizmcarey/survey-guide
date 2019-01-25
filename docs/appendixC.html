@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Preface | A Quick Start Guide to Survey Research</title>
+  <title>C Generating fake data | A Quick Start Guide to Survey Research</title>
   <meta name="description" content="A quick start guide to survey research">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Preface | A Quick Start Guide to Survey Research" />
+  <meta property="og:title" content="C Generating fake data | A Quick Start Guide to Survey Research" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Preface | A Quick Start Guide to Survey Research" />
+  <meta name="twitter:title" content="C Generating fake data | A Quick Start Guide to Survey Research" />
   
   <meta name="twitter:description" content="A quick start guide to survey research" />
   
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="macro.html">
+<link rel="prev" href="appendixB.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -179,35 +179,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>Hopefully you’ll find this book to be a condensed and easy to read resource on survey research.</p>
-<p>We developed this book in the hopes of future collaboration among other UX researchers.</p>
-<div id="outline" class="section level2 unnumbered">
-<h2>Outline</h2>
-<p>The content of the book will include:</p>
-<ul>
-<li><strong>Chapter 1</strong></li>
-<li><strong>Chapter 2</strong></li>
-</ul>
-</div>
-<div id="prerequisites" class="section level2 unnumbered">
-<h2>Prerequisites</h2>
-<p>All you need is an interest in conducting survey research and basic data analysis, we’ll include code snippets (python and R) along the way.</p>
-</div>
-<div id="acknowledgements" class="section level2 unnumbered">
-<h2>Acknowledgements</h2>
-<p>This book wouldn’t be possible without the contributions of:</p>
+<div id="appendixC" class="section level1">
+<h1><span class="header-section-number">C</span> Generating fake data</h1>
+<p>Here’s the code I used to create the respondent information table</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(charlatan) <span class="co"># library of fake data</span>
+<span class="kw">library</span>(glue) <span class="co"># library for pasting together variables</span>
 
-</div>
+email_domains &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;@gmail.com&quot;</span>, <span class="st">&quot;@hotmail.com&quot;</span>, <span class="st">&quot;@outlook.com&quot;</span>, <span class="st">&quot;@me.com&quot;</span>, <span class="st">&quot;@yahoo.com&quot;</span>)
+
+respondent_data &lt;-<span class="st"> </span><span class="kw">ch_generate</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;job&#39;</span>, <span class="st">&#39;phone_number&#39;</span>, <span class="dt">n =</span> <span class="dv">502</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                    </span><span class="kw">separate</span>(name, <span class="st">&quot;first&quot;</span>, <span class="dt">extra =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">remove=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                    </span><span class="kw">mutate</span>(<span class="dt">email =</span> <span class="kw">glue</span>(<span class="st">&quot;{first_lower}{email_domain}&quot;</span>, 
+                                          <span class="dt">first_lower =</span> <span class="kw">tolower</span>(first), 
+                                          <span class="dt">email_domain =</span> <span class="kw">sample</span>(email_domains, <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) ), 
+                           <span class="dt">gender =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;prefer not to say&quot;</span>), <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.55</span>, <span class="fl">0.35</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>)), 
+                           <span class="dt">age =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Under 18&quot;</span>, <span class="st">&quot;18-34&quot;</span>, <span class="st">&quot;35-54&quot;</span>, <span class="st">&quot;55+&quot;</span>), <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.30</span>))
+        )
+
+<span class="kw">write_csv</span>(respondent_data, <span class="st">&quot;./sample_data/respondent_data.csv&quot;</span>)
+
+respondent_data</code></pre>
+<pre><code>## # A tibble: 502 x 7
+##    name        first   job           phone_number  email    gender    age  
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;         &lt;chr&gt;         &lt;S3: gl&gt; &lt;chr&gt;     &lt;chr&gt;
+##  1 Reta Hoppe  Reta    Claims inspe… 412-194-2271… reta@gm… male      18-34
+##  2 Ms. Sherly… Ms      Personal ass… +42(0)228028… ms@me.c… female    35-54
+##  3 Louisiana … Louisi… Psychologist… (500)055-0844 louisia… male      18-34
+##  4 Annabell W… Annabe… Production m… 094-612-0373  annabel… male      35-54
+##  5 Hilbert Gl… Hilbert Production a… 306-834-5707… hilbert… prefer n… 18-34
+##  6 Oddie Brad… Oddie   Horticultura… 046-084-4734  oddie@g… male      35-54
+##  7 Libbie Erd… Libbie  Academic lib… (823)409-942… libbie@… female    35-54
+##  8 Joey Metz   Joey    Claims inspe… +94(7)687119… joey@gm… female    55+  
+##  9 Kelis Brad… Kelis   Race relatio… 1-304-433-71… kelis@g… prefer n… 18-34
+## 10 Stacia Ber… Stacia  Chartered ma… 687-383-8594… stacia@… male      18-34
+## # … with 492 more rows</code></pre>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="macro.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="appendixB.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

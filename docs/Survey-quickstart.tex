@@ -129,7 +129,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-01-17}
+    \date{2019-01-25}
 
 \usepackage{booktabs}
 
@@ -284,12 +284,13 @@ Download your raw survey data as a csv and load it into your your analysis tool 
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#load necessary packages for analysis}
+\CommentTok{# load necessary packages for analysis}
 \KeywordTok{library}\NormalTok{(tidyverse)        }\CommentTok{#contains all the library packages to manipulate and transform data}
 \KeywordTok{library}\NormalTok{(summarytools)     }\CommentTok{#shortcut tools to visualize summaries of the data}
 
-\CommentTok{#read/store the data as the variable df (short for dataframe)}
-\CommentTok{#replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set}
+\CommentTok{# read/store the data as the variable df (short for dataframe)}
+\CommentTok{# replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set}
+\NormalTok{file <-}\StringTok{ "./sample_data/Survey_test_data.csv"} \CommentTok{#load file from folder heirarchy }
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file)}
 \end{Highlighting}
 \end{Shaded}
@@ -315,18 +316,18 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#Store the column names by reading in the column header}
+\CommentTok{# Store the column names by reading in the column header}
 \NormalTok{df_names <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{0}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{names}\NormalTok{()}
 
-\CommentTok{#Read the entire file}
+\CommentTok{# Read the entire file}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }
-               \DataTypeTok{col_names =}\NormalTok{ df_names, }\CommentTok{#use df_names to title the columns}
-               \DataTypeTok{skip =} \DecValTok{3}\NormalTok{) }\CommentTok{#skip the first three lines}
+               \DataTypeTok{col_names =}\NormalTok{ df_names, }\CommentTok{# use df_names to title the columns}
+               \DataTypeTok{skip =} \DecValTok{3}\NormalTok{)             }\CommentTok{# skip the first three lines}
 
 \CommentTok{#store the question names}
-\NormalTok{question_bank <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }\CommentTok{#read in the first row of file}
-\StringTok{                 }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Q"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{#select columns that start with Q}
-\StringTok{                 }\KeywordTok{gather}\NormalTok{(key, question_text) }\CommentTok{#move data from wide to long}
+\NormalTok{question_bank <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(file, }\DataTypeTok{n_max=}\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{  }\CommentTok{# read in the first row of the file}
+\StringTok{                 }\KeywordTok{select}\NormalTok{(}\KeywordTok{starts_with}\NormalTok{(}\StringTok{"Q"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# select columns that start with Q}
+\StringTok{                 }\KeywordTok{gather}\NormalTok{(key, question_text)   }\CommentTok{# transform data from wide to long}
 \end{Highlighting}
 \end{Shaded}
 
@@ -359,12 +360,200 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 \hypertarget{preview-the-data}{%
 \subsection{Preview the data}\label{preview-the-data}}
 
-It's important to get a look at the data to spot an errors in uploading, etc.
+It's important to get a look at the data to spot any errors in uploading the dataset and the validity of the responses.
 
 You'll want to check for:
-* Total number of observations/rows
-* Drop off/Abandon rate
-* Survey completion time
+
+\begin{itemize}
+\tightlist
+\item
+  Total number of observations/rows
+\item
+  Duplicate responses
+\item
+  Drop off/Abandon rate of the survey
+\item
+  Average survey completion time
+\item
+  ``Speeders:'' those who couldn't have completed the survey in a reasonable amount of time
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+There are multiple different ways to preview your dataset before analysis. One quick way is to check the first few rows of your data. You can do this with the function \texttt{head()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Check the first 5 rows of data}
+\KeywordTok{head}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 29
+##   StartDate           EndDate             Status IPAddress Progress
+##   <dttm>              <dttm>              <chr>  <lgl>        <dbl>
+## 1 2019-01-15 13:28:39 2019-01-15 13:28:39 Surve~ NA             100
+## 2 2019-01-15 13:28:40 2019-01-15 13:28:40 Surve~ NA             100
+## 3 2019-01-15 13:36:47 2019-01-15 13:36:47 Surve~ NA             100
+## 4 2019-01-15 13:36:47 2019-01-15 13:36:47 Surve~ NA             100
+## 5 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~ NA             100
+## 6 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~ NA             100
+## # ... with 24 more variables: `Duration (in seconds)` <dbl>,
+## #   Finished <lgl>, RecordedDate <dttm>, ResponseId <chr>,
+## #   RecipientLastName <lgl>, RecipientFirstName <lgl>,
+## #   RecipientEmail <lgl>, ExternalReference <lgl>, LocationLatitude <dbl>,
+## #   LocationLongitude <dbl>, DistributionChannel <chr>,
+## #   UserLanguage <lgl>, Q1 <chr>, Q2 <chr>, Q3_4 <chr>, Q3_5 <chr>,
+## #   Q3_6 <chr>, Q3_7 <chr>, Q3_8 <chr>, Q3_9 <chr>, Q3_10 <chr>,
+## #   Q3_10_TEXT <chr>, Q4 <chr>, Q5 <chr>
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+A more comprehensive way to view your dataset is with the \texttt{skimr} package. This package will give an overview of the number of observations and variables in your data.
+
+The missing column should not be greater than 20\% of your total number of observations (unless it's a multiselect question).
+
+Questions with dropoff greater than 20\% can signal that the question was difficult for respondents to answer; you should be wary of response bias and consider removing the question from analysis and rewording the question for future survey sends.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(skimr)}
+\KeywordTok{skim}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Skim summary statistics
+##  n obs: 502 
+##  n variables: 29 
+## 
+## -- Variable type:character ------------------------------------------------
+##             variable missing complete   n min max empty n_unique
+##  DistributionChannel       0      502 502   4   4     0        1
+##                   Q1       0      502 502   5  14     0        6
+##                   Q2       0      502 502  18  34     0        5
+##                Q3_10     184      318 502   5   5     0        1
+##           Q3_10_TEXT     184      318 502  51 135     0      318
+##                 Q3_4     201      301 502  26  26     0        1
+##                 Q3_5     165      337 502  22  22     0        1
+##                 Q3_6     174      328 502  21  21     0        1
+##                 Q3_7     172      330 502  19  19     0        1
+##                 Q3_8     184      318 502  18  18     0        1
+##                 Q3_9     162      340 502  23  23     0        1
+##                   Q4       0      502 502  11  22     0        7
+##                   Q5       0      502 502  53 134     0      502
+##           ResponseId       0      502 502  17  17     0      502
+##               Status       0      502 502  11  11     0        1
+## 
+## -- Variable type:logical --------------------------------------------------
+##            variable missing complete   n mean           count
+##   ExternalReference     502        0 502  NaN             502
+##            Finished       0      502 502    1 TRU: 502, NA: 0
+##           IPAddress     502        0 502  NaN             502
+##      RecipientEmail     502        0 502  NaN             502
+##  RecipientFirstName     502        0 502  NaN             502
+##   RecipientLastName     502        0 502  NaN             502
+##        UserLanguage     502        0 502  NaN             502
+## 
+## -- Variable type:numeric --------------------------------------------------
+##               variable missing complete   n     mean   sd      p0     p25
+##  Duration (in seconds)       0      502 502    0.024 0.15    0       0   
+##       LocationLatitude       0      502 502   37.77  0      37.77   37.77
+##      LocationLongitude       0      502 502 -122.41  0    -122.41 -122.41
+##               Progress       0      502 502  100     0     100     100   
+##      p50     p75    p100     hist
+##     0       0       1    ▇▁▁▁▁▁▁▁
+##    37.77   37.77   37.77 ▁▁▁▇▁▁▁▁
+##  -122.41 -122.41 -122.41 ▁▁▁▇▁▁▁▁
+##   100     100     100    ▁▁▁▇▁▁▁▁
+## 
+## -- Variable type:POSIXct --------------------------------------------------
+##      variable missing complete   n        min        max     median
+##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##     StartDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  n_unique
+##        74
+##        74
+##        74
+\end{verbatim}
+
+Another package that can give a brief overview of your data is \texttt{summarytools}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(summarytools)}
+\KeywordTok{view}\NormalTok{(}\KeywordTok{dfSummary}\NormalTok{(df)) }\CommentTok{# use view lowercase to see html output in the Rstudio viewer pane}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{removing-duplicate-values}{%
+\subsection{Removing duplicate values}\label{removing-duplicate-values}}
+
+Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn't counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address.
+
+\textbf{View duplicates using janitor package}
+
+\begin{verbatim}
+## # A tibble: 502 x 30
+##    IPAddress dupe_count StartDate           EndDate             Status
+##    <lgl>          <int> <dttm>              <dttm>              <chr> 
+##  1 NA               502 2019-01-15 13:28:39 2019-01-15 13:28:39 Surve~
+##  2 NA               502 2019-01-15 13:28:40 2019-01-15 13:28:40 Surve~
+##  3 NA               502 2019-01-15 13:36:47 2019-01-15 13:36:47 Surve~
+##  4 NA               502 2019-01-15 13:36:47 2019-01-15 13:36:47 Surve~
+##  5 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+##  6 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+##  7 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+##  8 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+##  9 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+## 10 NA               502 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve~
+## # ... with 492 more rows, and 25 more variables: Progress <dbl>, `Duration
+## #   (in seconds)` <dbl>, Finished <lgl>, RecordedDate <dttm>,
+## #   ResponseId <chr>, RecipientLastName <lgl>, RecipientFirstName <lgl>,
+## #   RecipientEmail <lgl>, ExternalReference <lgl>, LocationLatitude <dbl>,
+## #   LocationLongitude <dbl>, DistributionChannel <chr>,
+## #   UserLanguage <lgl>, Q1 <chr>, Q2 <chr>, Q3_4 <chr>, Q3_5 <chr>,
+## #   Q3_6 <chr>, Q3_7 <chr>, Q3_8 <chr>, Q3_9 <chr>, Q3_10 <chr>,
+## #   Q3_10_TEXT <chr>, Q4 <chr>, Q5 <chr>
+\end{verbatim}
+
+\textbf{Manual way to view duplicates}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u_id <-}\StringTok{ }\KeywordTok{quo}\NormalTok{(IPAddress) }\CommentTok{# Store unique identifier column, can be IP address, email, etc. }
+
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{       }\KeywordTok{tally}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{       }\KeywordTok{filter}\NormalTok{(n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   IPAddress     n
+##   <lgl>     <int>
+## 1 NA          502
+\end{verbatim}
+
+You'll want to remove duplicate responses, and keep the most recent response.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(lubridate) }\CommentTok{# load library for converting datetimes}
+
+\CommentTok{#Remove duplicate emails, keep most recent submission}
+\NormalTok{df <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{EndDate =} \KeywordTok{as_datetime}\NormalTok{(EndDate, }\DataTypeTok{tz =} \StringTok{"America/Los_Angeles"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# converts column to a datetime format }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\KeywordTok{which.max}\NormalTok{(EndDate)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{appendix-appendix}{%
 \appendix}
@@ -404,6 +593,50 @@ You'll want to install the following packages:
 \NormalTok{import collections}
 \end{Highlighting}
 \end{Shaded}
+
+\hypertarget{appendixC}{%
+\chapter{Generating fake data}\label{appendixC}}
+
+Here's the code I used to create the respondent information table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(charlatan) }\CommentTok{# library of fake data}
+\KeywordTok{library}\NormalTok{(glue) }\CommentTok{# library for pasting together variables}
+
+\NormalTok{email_domains <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"@gmail.com"}\NormalTok{, }\StringTok{"@hotmail.com"}\NormalTok{, }\StringTok{"@outlook.com"}\NormalTok{, }\StringTok{"@me.com"}\NormalTok{, }\StringTok{"@yahoo.com"}\NormalTok{)}
+
+\NormalTok{respondent_data <-}\StringTok{ }\KeywordTok{ch_generate}\NormalTok{(}\StringTok{'name'}\NormalTok{, }\StringTok{'job'}\NormalTok{, }\StringTok{'phone_number'}\NormalTok{, }\DataTypeTok{n =} \DecValTok{502}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                    }\KeywordTok{separate}\NormalTok{(name, }\StringTok{"first"}\NormalTok{, }\DataTypeTok{extra =} \StringTok{"drop"}\NormalTok{, }\DataTypeTok{remove=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{email =} \KeywordTok{glue}\NormalTok{(}\StringTok{"\{first_lower\}\{email_domain\}"}\NormalTok{, }
+                                          \DataTypeTok{first_lower =} \KeywordTok{tolower}\NormalTok{(first), }
+                                          \DataTypeTok{email_domain =} \KeywordTok{sample}\NormalTok{(email_domains, }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) ), }
+                           \DataTypeTok{gender =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"other"}\NormalTok{, }\StringTok{"prefer not to say"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.55}\NormalTok{, }\FloatTok{0.35}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.05}\NormalTok{)), }
+                           \DataTypeTok{age =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Under 18"}\NormalTok{, }\StringTok{"18-34"}\NormalTok{, }\StringTok{"35-54"}\NormalTok{, }\StringTok{"55+"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.40}\NormalTok{, }\FloatTok{0.30}\NormalTok{))}
+\NormalTok{        )}
+
+\KeywordTok{write_csv}\NormalTok{(respondent_data, }\StringTok{"./sample_data/respondent_data.csv"}\NormalTok{)}
+
+\NormalTok{respondent_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 502 x 7
+##    name        first  job           phone_number  email     gender    age  
+##    <chr>       <chr>  <chr>         <chr>         <S3: glu> <chr>     <chr>
+##  1 Concetta D~ Conce~ Newspaper jo~ +02(2)470111~ concetta~ male      35-54
+##  2 Dola Padbe~ Dola   Stage manager 09296284909   dola@yah~ female    35-54
+##  3 Kaitlin Mr~ Kaitl~ Programmer, ~ 02970538312   kaitlin@~ male      55+  
+##  4 Hector Bos~ Hector Planning and~ 644.566.0726  hector@o~ female    18-34
+##  5 Dr. Ayleen~ Dr     Research sci~ 824-644-5768~ dr@outlo~ male      18-34
+##  6 Christin G~ Chris~ Designer, fu~ 695.270.4438~ christin~ prefer n~ 18-34
+##  7 Dr. Dorr S~ Dr     Furniture de~ 1-542-935-84~ dr@yahoo~ other     35-54
+##  8 Lavar Scho~ Lavar  Diagnostic r~ 1-208-385-92~ lavar@gm~ male      55+  
+##  9 Delpha Rit~ Delpha Amenity hort~ 962.568.2934  delpha@o~ male      18-34
+## 10 Mrs. Danye~ Mrs    Geophysical ~ (185)146-811~ mrs@outl~ male      35-54
+## # ... with 492 more rows
+\end{verbatim}
 
 \bibliography{book.bib,packages.bib}
 

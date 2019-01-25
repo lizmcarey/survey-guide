@@ -59,13 +59,14 @@ Before you can begin looking at the results, you'll need to clean the data. By "
 Download your raw survey data as a csv and load it into your your analysis tool of choice (e.g. Ipython notebook or Rstudio)
 
 **R version**
-```{r, eval=FALSE}
-#load necessary packages for analysis
+```{r warning=FALSE, message=FALSE}
+# load necessary packages for analysis
 library(tidyverse)        #contains all the library packages to manipulate and transform data
 library(summarytools)     #shortcut tools to visualize summaries of the data
 
-#read/store the data as the variable df (short for dataframe)
-#replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set
+# read/store the data as the variable df (short for dataframe)
+# replace "file" with "https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv" to download the survey data set
+file <- "./sample_data/Survey_test_data.csv" #load file from folder heirarchy 
 df <- read_csv(file)
 
 ```
@@ -87,24 +88,24 @@ When you download a csv from Qualtrics, it will come with a few extra rows you d
 **R version manual**
 ```{r, eval=FALSE}
 
-#Store the column names by reading in the column header
+# Store the column names by reading in the column header
 df_names <- read_csv(file, n_max=0) %>% names()
 
-#Read the entire file
+# Read the entire file
 df <- read_csv(file, 
-               col_names = df_names, #use df_names to title the columns
-               skip = 3) #skip the first three lines
+               col_names = df_names, # use df_names to title the columns
+               skip = 3)             # skip the first three lines
 
 #store the question names
-question_bank <- read_csv(file, n_max=1) %>%  #read in the first row of file
-                 select(starts_with("Q")) %>% #select columns that start with Q
-                 gather(key, question_text) #move data from wide to long
+question_bank <- read_csv(file, n_max=1) %>%  # read in the first row of the file
+                 select(starts_with("Q")) %>% # select columns that start with Q
+                 gather(key, question_text)   # transform data from wide to long
 
 ```
 
 **R version programmatic**
 
-```{r, eval=FALSE}
+```{r message=FALSE, warning=FALSE}
 #function to load qualtrics csv and remove extra rows
 load_qualtrics_csv <- function(file) {
   df_names <- read_csv(file, n_max = 0) %>% names()
@@ -128,9 +129,76 @@ question_bank <- get_questions(file)
 
 ### Preview the data
 
-It's important to get a look at the data to spot an errors in uploading, etc. 
+It's important to get a look at the data to spot any errors in uploading the dataset and the validity of the responses. 
 
 You'll want to check for: 
-* Total number of observations/rows
-* Drop off/Abandon rate 
-* Survey completion time
+
+ * Total number of observations/rows
+ * Duplicate responses
+ * Drop off/Abandon rate of the survey 
+ * Average survey completion time
+ * "Speeders:" those who couldn't have completed the survey in a reasonable amount of time
+ 
+ ***
+ 
+ There are multiple different ways to preview your dataset before analysis. One quick way is to check the first few rows of your data. You can do this with the function ```head()```. 
+ 
+```{r message=FALSE, warning=FALSE}
+#Check the first 5 rows of data
+head(df)
+```
+
+*** 
+A more comprehensive way to view your dataset is with the ```skimr``` package. This package will give an overview of the number of observations and variables in your data. 
+
+The missing column should not be greater than 20% of your total number of observations (unless it's a multiselect question). 
+
+Questions with dropoff greater than 20% can signal that the question was difficult for respondents to answer; you should be wary of response bias and consider removing the question from analysis and rewording the question for future survey sends.
+    
+```{r message=FALSE, warning=FALSE}
+library(skimr)
+skim(df)
+```
+Another package that can give a brief overview of your data is `summarytools` 
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(summarytools)
+view(dfSummary(df)) # use view lowercase to see html output in the Rstudio viewer pane
+```
+
+### Removing duplicate values
+ 
+Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn't counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address. 
+
+**View duplicates using janitor package** 
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(janitor)
+
+df %>% get_dupes(IPAddress) # get_dupes is a function available through janitor, can use more than one column to view duplicates
+
+```
+
+**Manual way to view duplicates**
+```{r message=FALSE, warning=FALSE}
+u_id <- quo(IPAddress) # Store unique identifier column, can be IP address, email, etc. 
+
+df %>% group_by(!!u_id) %>% 
+       tally() %>% 
+       filter(n > 1)
+```
+
+You'll want to remove duplicate responses, and keep the most recent response. 
+
+```{r message=FALSE, warning=FALSE}
+library(lubridate) # load library for converting datetimes
+
+#Remove duplicate emails, keep most recent submission
+df <- df %>% 
+  mutate(EndDate = as_datetime(EndDate, tz = "America/Los_Angeles")) %>% # converts column to a datetime format 
+  filter(!is.na(!!u_id)) %>% 
+  group_by(!!u_id) %>% 
+  slice(which.max(EndDate)) %>% 
+  ungroup() 
+```
+
+
