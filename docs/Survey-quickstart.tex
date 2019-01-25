@@ -128,7 +128,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2019-01-23}
+  \date{2019-01-25}
 
 \usepackage{booktabs}
 
@@ -434,11 +434,13 @@ A more comprehensive way to view your dataset is with the \texttt{skimr}
 package. This package will give an overview of the number of
 observations and variables in your data.
 
-The missing column should not be greater than 20\% than your total
-number of observations (unless it's a multiselect question). Questions
-with dropoff greater than 20\% can signal the question was difficult for
-respondents to answer; you should be wary of response bias and consider
-removing the question from analysis and consider rewording the question
+The missing column should not be greater than 20\% of your total number
+of observations (unless it's a multiselect question).
+
+Questions with dropoff greater than 20\% can signal that the question
+was difficult for respondents to answer; you should be wary of response
+bias and consider removing the question from analysis and rewording the
+question for future survey sends.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -452,7 +454,7 @@ removing the question from analysis and consider rewording the question
 ##  n obs: 502 
 ##  n variables: 29 
 ## 
-## -- Variable type:character ---------------------------------------------------------------
+## -- Variable type:character -----------------------------------------
 ##             variable missing complete   n min  max empty n_unique
 ##  DistributionChannel       0      502 502   4    4     0        1
 ##    ExternalReference     502        0 502 Inf -Inf     0        0
@@ -477,7 +479,7 @@ removing the question from analysis and consider rewording the question
 ##               Status       0      502 502  11   11     0        1
 ##         UserLanguage     502        0 502 Inf -Inf     0        0
 ## 
-## -- Variable type:integer -----------------------------------------------------------------
+## -- Variable type:integer -------------------------------------------
 ##               variable missing complete   n    mean   sd  p0 p25 p50 p75
 ##  Duration (in seconds)       0      502 502   0.024 0.15   0   0   0   0
 ##               Progress       0      502 502 100     0    100 100 100 100
@@ -485,7 +487,7 @@ removing the question from analysis and consider rewording the question
 ##     1 ▇▁▁▁▁▁▁▁
 ##   100 ▁▁▁▇▁▁▁▁
 ## 
-## -- Variable type:numeric -----------------------------------------------------------------
+## -- Variable type:numeric -------------------------------------------
 ##           variable missing complete   n    mean sd      p0     p25     p50
 ##   LocationLatitude       0      502 502   37.77  0   37.77   37.77   37.77
 ##  LocationLongitude       0      502 502 -122.41  0 -122.41 -122.41 -122.41
@@ -493,7 +495,7 @@ removing the question from analysis and consider rewording the question
 ##    37.77   37.77 ▁▁▁▇▁▁▁▁
 ##  -122.41 -122.41 ▁▁▁▇▁▁▁▁
 ## 
-## -- Variable type:POSIXct -----------------------------------------------------------------
+## -- Variable type:POSIXct -------------------------------------------
 ##      variable missing complete   n        min        max     median
 ##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
 ##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
@@ -510,7 +512,85 @@ Another package that can give a brief overview of your data is
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(summarytools)}
-\KeywordTok{view}\NormalTok{(}\KeywordTok{dfSummary}\NormalTok{(df)) }\CommentTok{# use view lowercase to see html output in the Viewer pane}
+\KeywordTok{view}\NormalTok{(}\KeywordTok{dfSummary}\NormalTok{(df)) }\CommentTok{# use view lowercase to see html output in the Rstudio viewer pane}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Removing duplicate values}\label{removing-duplicate-values}
+
+Respondents may come back to the survey, or try to take the survey a
+second time on a new device. To ensure a respondent isn't counted more
+than once in a survey, be sure to check for duplicate values by using a
+unique identifier. Common unique indentifiers include: email, embedded
+user id, or IP address.
+
+\textbf{View duplicates using janitor package}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(janitor)}
+
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{get_dupes}\NormalTok{(IPAddress) }\CommentTok{# get_dupes is a function available through janitor, can use more than one column to view duplicates}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 502 x 30
+##    IPAddress dupe_count StartDate           EndDate             Status    
+##    <chr>          <int> <dttm>              <dttm>              <chr>     
+##  1 <NA>             502 2019-01-15 13:28:39 2019-01-15 13:28:39 Survey Te~
+##  2 <NA>             502 2019-01-15 13:28:40 2019-01-15 13:28:40 Survey Te~
+##  3 <NA>             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te~
+##  4 <NA>             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te~
+##  5 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+##  6 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+##  7 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+##  8 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+##  9 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+## 10 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
+## # ... with 492 more rows, and 25 more variables: Progress <int>, `Duration
+## #   (in seconds)` <int>, Finished <chr>, RecordedDate <dttm>,
+## #   ResponseId <chr>, RecipientLastName <chr>, RecipientFirstName <chr>,
+## #   RecipientEmail <chr>, ExternalReference <chr>, LocationLatitude <dbl>,
+## #   LocationLongitude <dbl>, DistributionChannel <chr>,
+## #   UserLanguage <chr>, Q1 <chr>, Q2 <chr>, Q3_4 <chr>, Q3_5 <chr>,
+## #   Q3_6 <chr>, Q3_7 <chr>, Q3_8 <chr>, Q3_9 <chr>, Q3_10 <chr>,
+## #   Q3_10_TEXT <chr>, Q4 <chr>, Q5 <chr>
+\end{verbatim}
+
+\textbf{Manual way to view duplicates}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{u_id <-}\StringTok{ }\KeywordTok{quo}\NormalTok{(IPAddress) }\CommentTok{# Store unique identifier column, can be IP address, email, etc. }
+
+\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{       }\KeywordTok{tally}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{       }\KeywordTok{filter}\NormalTok{(n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   IPAddress     n
+##   <chr>     <int>
+## 1 <NA>        502
+\end{verbatim}
+
+You'll want to remove duplicate responses, and keep the most recent
+response.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(lubridate) }\CommentTok{# load library for converting datetimes}
+
+\CommentTok{#Remove duplicate emails, keep most recent submission}
+\NormalTok{df <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{EndDate =} \KeywordTok{as_datetime}\NormalTok{(EndDate, }\DataTypeTok{tz =} \StringTok{"America/Los_Angeles"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# converts column to a datetime format }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(}\OperatorTok{!!}\NormalTok{u_id) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\KeywordTok{which.max}\NormalTok{(EndDate)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }
 \end{Highlighting}
 \end{Shaded}
 
@@ -548,6 +628,49 @@ You'll want to install the following packages:
 \NormalTok{import collections}
 \end{Highlighting}
 \end{Shaded}
+
+\chapter{Generating fake data}\label{appendixC}
+
+Here's the code I used to create the respondent information table
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(charlatan) }\CommentTok{# library of fake data}
+\KeywordTok{library}\NormalTok{(glue) }\CommentTok{# library for pasting together variables}
+
+\NormalTok{email_domains <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"@gmail.com"}\NormalTok{, }\StringTok{"@hotmail.com"}\NormalTok{, }\StringTok{"@outlook.com"}\NormalTok{, }\StringTok{"@me.com"}\NormalTok{, }\StringTok{"@yahoo.com"}\NormalTok{)}
+
+\NormalTok{respondent_data <-}\StringTok{ }\KeywordTok{ch_generate}\NormalTok{(}\StringTok{'name'}\NormalTok{, }\StringTok{'job'}\NormalTok{, }\StringTok{'phone_number'}\NormalTok{, }\DataTypeTok{n =} \DecValTok{502}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                    }\KeywordTok{separate}\NormalTok{(name, }\StringTok{"first"}\NormalTok{, }\DataTypeTok{extra =} \StringTok{"drop"}\NormalTok{, }\DataTypeTok{remove=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{email =} \KeywordTok{glue}\NormalTok{(}\StringTok{"\{first_lower\}\{email_domain\}"}\NormalTok{, }
+                                          \DataTypeTok{first_lower =} \KeywordTok{tolower}\NormalTok{(first), }
+                                          \DataTypeTok{email_domain =} \KeywordTok{sample}\NormalTok{(email_domains, }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) ), }
+                           \DataTypeTok{gender =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"other"}\NormalTok{, }\StringTok{"prefer not to say"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.55}\NormalTok{, }\FloatTok{0.35}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.05}\NormalTok{)), }
+                           \DataTypeTok{age =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Under 18"}\NormalTok{, }\StringTok{"18-34"}\NormalTok{, }\StringTok{"35-54"}\NormalTok{, }\StringTok{"55+"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.40}\NormalTok{, }\FloatTok{0.30}\NormalTok{))}
+\NormalTok{        )}
+
+\KeywordTok{write_csv}\NormalTok{(respondent_data, }\StringTok{"./sample_data/respondent_data.csv"}\NormalTok{)}
+
+\NormalTok{respondent_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 502 x 7
+##    name                  first   job      phone_number email  gender age  
+##    <chr>                 <chr>   <chr>    <chr>        <S3: > <chr>  <chr>
+##  1 Cherri Ryan           Cherri  Public ~ +42(6)37022~ cherr~ male   35-54
+##  2 Mr. Miller Zemlak     Mr      Enginee~ (580)686-38~ mr@ho~ male   55+  
+##  3 Dr. James Quigley DVM Dr      Surveyo~ +39(1)83407~ dr@gm~ male   18-34
+##  4 Joshuah Boyle         Joshuah Designe~ 1-308-952-5~ joshu~ male   55+  
+##  5 Glennie Rodriguez     Glennie Nature ~ 1-425-742-4~ glenn~ female 35-54
+##  6 Jean Torp             Jean    Charter~ 1-589-190-4~ jean@~ male   35-54
+##  7 Deshaun Kunze         Deshaun Town pl~ (681)390-65~ desha~ female 35-54
+##  8 Leigh Nitzsche-Miller Leigh   Occupat~ 216-730-735~ leigh~ male   18-34
+##  9 Leopold Baumbach      Leopold Special~ 778.109.0931 leopo~ male   55+  
+## 10 Dr. Hughey Veum       Dr      Surveyo~ 820.012.323~ dr@gm~ male   55+  
+## # ... with 492 more rows
+\end{verbatim}
 
 \bibliography{book.bib,packages.bib}
 

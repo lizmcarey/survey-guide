@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-23">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -120,6 +120,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.2.1</b> Load the data</a></li>
 <li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#loading-qualtrics-data"><i class="fa fa-check"></i><b>3.2.2</b> Loading Qualtrics data</a></li>
 <li class="chapter" data-level="3.2.3" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.3</b> Preview the data</a></li>
+<li class="chapter" data-level="3.2.4" data-path="analysis.html"><a href="analysis.html#removing-duplicate-values"><i class="fa fa-check"></i><b>3.2.4</b> Removing duplicate values</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -127,6 +128,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="A.1" data-path="appendixA.html"><a href="appendixA.html#package-installation"><i class="fa fa-check"></i><b>A.1</b> Package installation</a></li>
 </ul></li>
 <li class="chapter" data-level="B" data-path="appendixB.html"><a href="appendixB.html"><i class="fa fa-check"></i><b>B</b> Setting up python</a></li>
+<li class="chapter" data-level="C" data-path="appendixC.html"><a href="appendixC.html"><i class="fa fa-check"></i><b>C</b> Generating fake data</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -282,14 +284,15 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ## #   Q3_10_TEXT &lt;chr&gt;, Q4 &lt;chr&gt;, Q5 &lt;chr&gt;</code></pre>
 <hr />
 <p>A more comprehensive way to view your dataset is with the <code>skimr</code> package. This package will give an overview of the number of observations and variables in your data.</p>
-<p>The missing column should not be greater than 20% than your total number of observations (unless it’s a multiselect question). Questions with dropoff greater than 20% can signal the question was difficult for respondents to answer; you should be wary of response bias and consider removing the question from analysis and consider rewording the question</p>
+<p>The missing column should not be greater than 20% of your total number of observations (unless it’s a multiselect question).</p>
+<p>Questions with dropoff greater than 20% can signal that the question was difficult for respondents to answer; you should be wary of response bias and consider removing the question from analysis and rewording the question for future survey sends.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
 <span class="kw">skim</span>(df)</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 502 
 ##  n variables: 29 
 ## 
-## ── Variable type:character ───────────────────────────────────────────────────────────────
+## ── Variable type:character ─────────────────────────────────────────
 ##             variable missing complete   n min  max empty n_unique
 ##  DistributionChannel       0      502 502   4    4     0        1
 ##    ExternalReference     502        0 502 Inf -Inf     0        0
@@ -314,7 +317,7 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ##               Status       0      502 502  11   11     0        1
 ##         UserLanguage     502        0 502 Inf -Inf     0        0
 ## 
-## ── Variable type:integer ─────────────────────────────────────────────────────────────────
+## ── Variable type:integer ───────────────────────────────────────────
 ##               variable missing complete   n    mean   sd  p0 p25 p50 p75
 ##  Duration (in seconds)       0      502 502   0.024 0.15   0   0   0   0
 ##               Progress       0      502 502 100     0    100 100 100 100
@@ -322,7 +325,7 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ##     1 ▇▁▁▁▁▁▁▁
 ##   100 ▁▁▁▇▁▁▁▁
 ## 
-## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
+## ── Variable type:numeric ───────────────────────────────────────────
 ##           variable missing complete   n    mean sd      p0     p25     p50
 ##   LocationLatitude       0      502 502   37.77  0   37.77   37.77   37.77
 ##  LocationLongitude       0      502 502 -122.41  0 -122.41 -122.41 -122.41
@@ -330,7 +333,7 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ##    37.77   37.77 ▁▁▁▇▁▁▁▁
 ##  -122.41 -122.41 ▁▁▁▇▁▁▁▁
 ## 
-## ── Variable type:POSIXct ─────────────────────────────────────────────────────────────────
+## ── Variable type:POSIXct ───────────────────────────────────────────
 ##      variable missing complete   n        min        max     median
 ##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
 ##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
@@ -341,7 +344,56 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ##        74</code></pre>
 <p>Another package that can give a brief overview of your data is <code>summarytools</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(summarytools)
-<span class="kw">view</span>(<span class="kw">dfSummary</span>(df)) <span class="co"># use view lowercase to see html output in the Viewer pane</span></code></pre></div>
+<span class="kw">view</span>(<span class="kw">dfSummary</span>(df)) <span class="co"># use view lowercase to see html output in the Rstudio viewer pane</span></code></pre></div>
+</div>
+<div id="removing-duplicate-values" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> Removing duplicate values</h3>
+<p>Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn’t counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address.</p>
+<p><strong>View duplicates using janitor package</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janitor)
+
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_dupes</span>(IPAddress) <span class="co"># get_dupes is a function available through janitor, can use more than one column to view duplicates</span></code></pre></div>
+<pre><code>## # A tibble: 502 x 30
+##    IPAddress dupe_count StartDate           EndDate             Status    
+##    &lt;chr&gt;          &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;     
+##  1 &lt;NA&gt;             502 2019-01-15 13:28:39 2019-01-15 13:28:39 Survey Te…
+##  2 &lt;NA&gt;             502 2019-01-15 13:28:40 2019-01-15 13:28:40 Survey Te…
+##  3 &lt;NA&gt;             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te…
+##  4 &lt;NA&gt;             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te…
+##  5 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+##  6 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+##  7 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+##  8 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+##  9 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+## 10 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
+## # ... with 492 more rows, and 25 more variables: Progress &lt;int&gt;, `Duration
+## #   (in seconds)` &lt;int&gt;, Finished &lt;chr&gt;, RecordedDate &lt;dttm&gt;,
+## #   ResponseId &lt;chr&gt;, RecipientLastName &lt;chr&gt;, RecipientFirstName &lt;chr&gt;,
+## #   RecipientEmail &lt;chr&gt;, ExternalReference &lt;chr&gt;, LocationLatitude &lt;dbl&gt;,
+## #   LocationLongitude &lt;dbl&gt;, DistributionChannel &lt;chr&gt;,
+## #   UserLanguage &lt;chr&gt;, Q1 &lt;chr&gt;, Q2 &lt;chr&gt;, Q3_4 &lt;chr&gt;, Q3_5 &lt;chr&gt;,
+## #   Q3_6 &lt;chr&gt;, Q3_7 &lt;chr&gt;, Q3_8 &lt;chr&gt;, Q3_9 &lt;chr&gt;, Q3_10 &lt;chr&gt;,
+## #   Q3_10_TEXT &lt;chr&gt;, Q4 &lt;chr&gt;, Q5 &lt;chr&gt;</code></pre>
+<p><strong>Manual way to view duplicates</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u_id &lt;-<span class="st"> </span><span class="kw">quo</span>(IPAddress) <span class="co"># Store unique identifier column, can be IP address, email, etc. </span>
+
+df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="op">!!</span>u_id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">       </span><span class="kw">tally</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">       </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   IPAddress     n
+##   &lt;chr&gt;     &lt;int&gt;
+## 1 &lt;NA&gt;        502</code></pre>
+<p>You’ll want to remove duplicate responses, and keep the most recent response.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate) <span class="co"># load library for converting datetimes</span>
+
+<span class="co">#Remove duplicate emails, keep most recent submission</span>
+df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">EndDate =</span> <span class="kw">as_datetime</span>(EndDate, <span class="dt">tz =</span> <span class="st">&quot;America/Los_Angeles&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># converts column to a datetime format </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(<span class="op">!!</span>u_id)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(<span class="op">!!</span>u_id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">slice</span>(<span class="kw">which.max</span>(EndDate)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() </code></pre></div>
 
 </div>
 </div>

@@ -171,7 +171,7 @@ view(dfSummary(df)) # use view lowercase to see html output in the Rstudio viewe
 Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn't counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address. 
 
 **View duplicates using janitor package** 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(janitor)
 
 df %>% get_dupes(IPAddress) # get_dupes is a function available through janitor, can use more than one column to view duplicates
@@ -190,6 +190,8 @@ df %>% group_by(!!u_id) %>%
 You'll want to remove duplicate responses, and keep the most recent response. 
 
 ```{r message=FALSE, warning=FALSE}
+library(lubridate) # load library for converting datetimes
+
 #Remove duplicate emails, keep most recent submission
 df <- df %>% 
   mutate(EndDate = as_datetime(EndDate, tz = "America/Los_Angeles")) %>% # converts column to a datetime format 
