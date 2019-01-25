@@ -1,3 +1,5 @@
 # Writing effective survey questions
 
 Effective survey questions result in **consistent** and **reliable** responses.
+
+Surveys are NOT a shortcut for usability tests

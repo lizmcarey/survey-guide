@@ -227,6 +227,8 @@ questions}\label{writing-effective-survey-questions}
 Effective survey questions result in \textbf{consistent} and
 \textbf{reliable} responses.
 
+Surveys are NOT a shortcut for usability tests
+
 \chapter{Survey Analysis}\label{analysis}
 
 After you've fielded your survey, here are the steps to making sense of
@@ -516,6 +518,107 @@ Another package that can give a brief overview of your data is
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{Joining data sets}\label{joining-data-sets}
+
+Sometimes the data you need lives in two tables. \texttt{dplyr} from the
+\texttt{tidyverse} package makes it easy to join your data sets
+together. In order to join two tables together, you'll need a shared
+unique identifier across the two tables.
+
+Below are all the ways you can join two data sets using R and the
+corresponding \texttt{dplyr} functions.
+
+\begin{figure}
+\centering
+\includegraphics{figs/combine_datasets.png}
+\caption{}
+\end{figure}
+
+You can view this image and additional ways to transform data sets on
+the
+\href{https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf}{RStudio
+Data Wrangling Cheat Sheet}.
+
+In \protect\hyperlink{appendixC}{Appendix C}, I've generated a fake
+dataset with corresponding ResponseId's that match to the survey data
+set (df).
+
+Below I use a left join to merge respondent data table with the survey
+data table.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{left_join}\NormalTok{(respondent_data, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"ResponseId"}\NormalTok{ =}\StringTok{ "ResponseId"}\NormalTok{))}
+
+\CommentTok{# View merged data sets}
+\KeywordTok{skim}\NormalTok{(df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Skim summary statistics
+##  n obs: 502 
+##  n variables: 36 
+## 
+## -- Variable type:character -----------------------------------------
+##             variable missing complete   n min  max empty n_unique
+##                  age       0      502 502   3    8     0        4
+##  DistributionChannel       0      502 502   4    4     0        1
+##                email       0      502 502   9   22     0      412
+##    ExternalReference     502        0 502 Inf -Inf     0        0
+##             Finished       0      502 502   4    4     0        1
+##           first_name       0      502 502   2   10     0      385
+##               gender       0      502 502   4   17     0        4
+##            IPAddress     502        0 502 Inf -Inf     0        0
+##                  job       0      502 502   3   53     0      339
+##                 name       0      502 502   8   28     0      502
+##         phone_number       0      502 502  11   20     0      502
+##                   Q1       0      502 502   5   14     0        6
+##                   Q2       0      502 502  18   34     0        5
+##                Q3_10     184      318 502   5    5     0        1
+##           Q3_10_TEXT     184      318 502  51  135     0      318
+##                 Q3_4     201      301 502  26   26     0        1
+##                 Q3_5     165      337 502  22   22     0        1
+##                 Q3_6     174      328 502  21   21     0        1
+##                 Q3_7     172      330 502  19   19     0        1
+##                 Q3_8     184      318 502  18   18     0        1
+##                 Q3_9     162      340 502  23   23     0        1
+##                   Q4       0      502 502  11   22     0        7
+##                   Q5       0      502 502  53  134     0      502
+##       RecipientEmail     502        0 502 Inf -Inf     0        0
+##   RecipientFirstName     502        0 502 Inf -Inf     0        0
+##    RecipientLastName     502        0 502 Inf -Inf     0        0
+##           ResponseId       0      502 502  17   17     0      502
+##               Status       0      502 502  11   11     0        1
+##         UserLanguage     502        0 502 Inf -Inf     0        0
+## 
+## -- Variable type:integer -------------------------------------------
+##               variable missing complete   n    mean   sd  p0 p25 p50 p75
+##  Duration (in seconds)       0      502 502   0.024 0.15   0   0   0   0
+##               Progress       0      502 502 100     0    100 100 100 100
+##  p100     hist
+##     1 ▇▁▁▁▁▁▁▁
+##   100 ▁▁▁▇▁▁▁▁
+## 
+## -- Variable type:numeric -------------------------------------------
+##           variable missing complete   n    mean sd      p0     p25     p50
+##   LocationLatitude       0      502 502   37.77  0   37.77   37.77   37.77
+##  LocationLongitude       0      502 502 -122.41  0 -122.41 -122.41 -122.41
+##      p75    p100     hist
+##    37.77   37.77 ▁▁▁▇▁▁▁▁
+##  -122.41 -122.41 ▁▁▁▇▁▁▁▁
+## 
+## -- Variable type:POSIXct -------------------------------------------
+##      variable missing complete   n        min        max     median
+##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##     StartDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  n_unique
+##        74
+##        74
+##        74
+\end{verbatim}
+
 \subsection{Removing duplicate values}\label{removing-duplicate-values}
 
 Respondents may come back to the survey, or try to take the survey a
@@ -533,30 +636,6 @@ user id, or IP address.
 \NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{get_dupes}\NormalTok{(IPAddress) }\CommentTok{# get_dupes is a function available through janitor, can use more than one column to view duplicates}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 502 x 30
-##    IPAddress dupe_count StartDate           EndDate             Status    
-##    <chr>          <int> <dttm>              <dttm>              <chr>     
-##  1 <NA>             502 2019-01-15 13:28:39 2019-01-15 13:28:39 Survey Te~
-##  2 <NA>             502 2019-01-15 13:28:40 2019-01-15 13:28:40 Survey Te~
-##  3 <NA>             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te~
-##  4 <NA>             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te~
-##  5 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-##  6 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-##  7 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-##  8 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-##  9 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-## 10 <NA>             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te~
-## # ... with 492 more rows, and 25 more variables: Progress <int>, `Duration
-## #   (in seconds)` <int>, Finished <chr>, RecordedDate <dttm>,
-## #   ResponseId <chr>, RecipientLastName <chr>, RecipientFirstName <chr>,
-## #   RecipientEmail <chr>, ExternalReference <chr>, LocationLatitude <dbl>,
-## #   LocationLongitude <dbl>, DistributionChannel <chr>,
-## #   UserLanguage <chr>, Q1 <chr>, Q2 <chr>, Q3_4 <chr>, Q3_5 <chr>,
-## #   Q3_6 <chr>, Q3_7 <chr>, Q3_8 <chr>, Q3_9 <chr>, Q3_10 <chr>,
-## #   Q3_10_TEXT <chr>, Q4 <chr>, Q5 <chr>
-\end{verbatim}
 
 \textbf{Manual way to view duplicates}
 
@@ -629,7 +708,7 @@ You'll want to install the following packages:
 \end{Highlighting}
 \end{Shaded}
 
-\chapter{Generating fake data}\label{appendixC}
+\hypertarget{appendixC}{\chapter{Generating fake data}\label{appendixC}}
 
 Here's the code I used to create the respondent information table
 
@@ -640,36 +719,44 @@ Here's the code I used to create the respondent information table
 
 \NormalTok{email_domains <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"@gmail.com"}\NormalTok{, }\StringTok{"@hotmail.com"}\NormalTok{, }\StringTok{"@outlook.com"}\NormalTok{, }\StringTok{"@me.com"}\NormalTok{, }\StringTok{"@yahoo.com"}\NormalTok{)}
 
-\NormalTok{respondent_data <-}\StringTok{ }\KeywordTok{ch_generate}\NormalTok{(}\StringTok{'name'}\NormalTok{, }\StringTok{'job'}\NormalTok{, }\StringTok{'phone_number'}\NormalTok{, }\DataTypeTok{n =} \DecValTok{502}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{                    }\KeywordTok{separate}\NormalTok{(name, }\StringTok{"first"}\NormalTok{, }\DataTypeTok{extra =} \StringTok{"drop"}\NormalTok{, }\DataTypeTok{remove=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\NormalTok{respondent_data <-}\StringTok{ }\KeywordTok{ch_generate}\NormalTok{(}\StringTok{'name'}\NormalTok{, }\StringTok{'job'}\NormalTok{, }\StringTok{'phone_number'}\NormalTok{, }\DataTypeTok{n =} \KeywordTok{nrow}\NormalTok{(df)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                    }\KeywordTok{separate}\NormalTok{(name, }\StringTok{"first_name"}\NormalTok{, }\DataTypeTok{extra =} \StringTok{"drop"}\NormalTok{, }\DataTypeTok{remove=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{                    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{email =} \KeywordTok{glue}\NormalTok{(}\StringTok{"\{first_lower\}\{email_domain\}"}\NormalTok{, }
-                                          \DataTypeTok{first_lower =} \KeywordTok{tolower}\NormalTok{(first), }
-                                          \DataTypeTok{email_domain =} \KeywordTok{sample}\NormalTok{(email_domains, }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) ), }
-                           \DataTypeTok{gender =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"other"}\NormalTok{, }\StringTok{"prefer not to say"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.55}\NormalTok{, }\FloatTok{0.35}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.05}\NormalTok{)), }
-                           \DataTypeTok{age =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Under 18"}\NormalTok{, }\StringTok{"18-34"}\NormalTok{, }\StringTok{"35-54"}\NormalTok{, }\StringTok{"55+"}\NormalTok{), }\DecValTok{502}\NormalTok{, }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.40}\NormalTok{, }\FloatTok{0.30}\NormalTok{))}
+                                          \DataTypeTok{first_lower =} \KeywordTok{tolower}\NormalTok{(first_name), }
+                                          \DataTypeTok{email_domain =} \KeywordTok{sample}\NormalTok{(email_domains, }\KeywordTok{nrow}\NormalTok{(df), }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{) ), }
+                           \DataTypeTok{gender =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"other"}\NormalTok{, }\StringTok{"prefer not to say"}\NormalTok{), }\KeywordTok{nrow}\NormalTok{(df), }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.55}\NormalTok{, }\FloatTok{0.35}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.05}\NormalTok{)), }
+                           \DataTypeTok{age =} \KeywordTok{sample}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"Under 18"}\NormalTok{, }\StringTok{"18-34"}\NormalTok{, }\StringTok{"35-54"}\NormalTok{, }\StringTok{"55+"}\NormalTok{), }\KeywordTok{nrow}\NormalTok{(df), }\DataTypeTok{replace=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{prob =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.40}\NormalTok{, }\FloatTok{0.30}\NormalTok{))}
 \NormalTok{        )}
 
-\KeywordTok{write_csv}\NormalTok{(respondent_data, }\StringTok{"./sample_data/respondent_data.csv"}\NormalTok{)}
+\CommentTok{# add ResponseId column from survey sample}
+\NormalTok{respondent_data <-}\StringTok{ }\NormalTok{df }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(ResponseId) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{bind_cols}\NormalTok{(respondent_data)}
 
-\NormalTok{respondent_data}
+\KeywordTok{write_csv}\NormalTok{(respondent_data, }\StringTok{"./sample_data/respondent_data.csv"}\NormalTok{) }\CommentTok{# Store data in sample_data folder}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{skim}\NormalTok{(respondent_data)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 502 x 7
-##    name                  first   job      phone_number email  gender age  
-##    <chr>                 <chr>   <chr>    <chr>        <S3: > <chr>  <chr>
-##  1 Cherri Ryan           Cherri  Public ~ +42(6)37022~ cherr~ male   35-54
-##  2 Mr. Miller Zemlak     Mr      Enginee~ (580)686-38~ mr@ho~ male   55+  
-##  3 Dr. James Quigley DVM Dr      Surveyo~ +39(1)83407~ dr@gm~ male   18-34
-##  4 Joshuah Boyle         Joshuah Designe~ 1-308-952-5~ joshu~ male   55+  
-##  5 Glennie Rodriguez     Glennie Nature ~ 1-425-742-4~ glenn~ female 35-54
-##  6 Jean Torp             Jean    Charter~ 1-589-190-4~ jean@~ male   35-54
-##  7 Deshaun Kunze         Deshaun Town pl~ (681)390-65~ desha~ female 35-54
-##  8 Leigh Nitzsche-Miller Leigh   Occupat~ 216-730-735~ leigh~ male   18-34
-##  9 Leopold Baumbach      Leopold Special~ 778.109.0931 leopo~ male   55+  
-## 10 Dr. Hughey Veum       Dr      Surveyo~ 820.012.323~ dr@gm~ male   55+  
-## # ... with 492 more rows
+## Skim summary statistics
+##  n obs: 502 
+##  n variables: 8 
+## 
+## -- Variable type:character -----------------------------------------
+##      variable missing complete   n min max empty n_unique
+##           age       0      502 502   3   8     0        4
+##         email       0      502 502   9  22     0      412
+##    first_name       0      502 502   2  10     0      385
+##        gender       0      502 502   4  17     0        4
+##           job       0      502 502   3  53     0      339
+##          name       0      502 502   8  28     0      502
+##  phone_number       0      502 502  11  20     0      502
+##    ResponseId       0      502 502  17  17     0      502
 \end{verbatim}
 
 \bibliography{book.bib,packages.bib}

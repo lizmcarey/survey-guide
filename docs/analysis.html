@@ -120,7 +120,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.2.1</b> Load the data</a></li>
 <li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#loading-qualtrics-data"><i class="fa fa-check"></i><b>3.2.2</b> Loading Qualtrics data</a></li>
 <li class="chapter" data-level="3.2.3" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.3</b> Preview the data</a></li>
-<li class="chapter" data-level="3.2.4" data-path="analysis.html"><a href="analysis.html#removing-duplicate-values"><i class="fa fa-check"></i><b>3.2.4</b> Removing duplicate values</a></li>
+<li class="chapter" data-level="3.2.4" data-path="analysis.html"><a href="analysis.html#joining-data-sets"><i class="fa fa-check"></i><b>3.2.4</b> Joining data sets</a></li>
+<li class="chapter" data-level="3.2.5" data-path="analysis.html"><a href="analysis.html#removing-duplicate-values"><i class="fa fa-check"></i><b>3.2.5</b> Removing duplicate values</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -346,34 +347,90 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(summarytools)
 <span class="kw">view</span>(<span class="kw">dfSummary</span>(df)) <span class="co"># use view lowercase to see html output in the Rstudio viewer pane</span></code></pre></div>
 </div>
+<div id="joining-data-sets" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> Joining data sets</h3>
+<p>Sometimes the data you need lives in two tables. <code>dplyr</code> from the <code>tidyverse</code> package makes it easy to join your data sets together. In order to join two tables together, you’ll need a shared unique identifier across the two tables.</p>
+<p>Below are all the ways you can join two data sets using R and the corresponding <code>dplyr</code> functions.</p>
+<div class="figure">
+<img src="figs/combine_datasets.png" />
+
+</div>
+<p>You can view this image and additional ways to transform data sets on the <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">RStudio Data Wrangling Cheat Sheet</a>.</p>
+<p>In <a href="appendixC.html#appendixC">Appendix C</a>, I’ve generated a fake dataset with corresponding ResponseId’s that match to the survey data set (df).</p>
+<p>Below I use a left join to merge respondent data table with the survey data table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(respondent_data, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;ResponseId&quot;</span> =<span class="st"> &quot;ResponseId&quot;</span>))
+
+<span class="co"># View merged data sets</span>
+<span class="kw">skim</span>(df)</code></pre></div>
+<pre><code>## Skim summary statistics
+##  n obs: 502 
+##  n variables: 36 
+## 
+## ── Variable type:character ─────────────────────────────────────────
+##             variable missing complete   n min  max empty n_unique
+##                  age       0      502 502   3    8     0        4
+##  DistributionChannel       0      502 502   4    4     0        1
+##                email       0      502 502   9   22     0      410
+##    ExternalReference     502        0 502 Inf -Inf     0        0
+##             Finished       0      502 502   4    4     0        1
+##           first_name       0      502 502   2   10     0      377
+##               gender       0      502 502   4   17     0        4
+##            IPAddress     502        0 502 Inf -Inf     0        0
+##                  job       0      502 502   3   59     0      345
+##                 name       0      502 502   8   27     0      502
+##         phone_number       0      502 502  11   20     0      502
+##                   Q1       0      502 502   5   14     0        6
+##                   Q2       0      502 502  18   34     0        5
+##                Q3_10     184      318 502   5    5     0        1
+##           Q3_10_TEXT     184      318 502  51  135     0      318
+##                 Q3_4     201      301 502  26   26     0        1
+##                 Q3_5     165      337 502  22   22     0        1
+##                 Q3_6     174      328 502  21   21     0        1
+##                 Q3_7     172      330 502  19   19     0        1
+##                 Q3_8     184      318 502  18   18     0        1
+##                 Q3_9     162      340 502  23   23     0        1
+##                   Q4       0      502 502  11   22     0        7
+##                   Q5       0      502 502  53  134     0      502
+##       RecipientEmail     502        0 502 Inf -Inf     0        0
+##   RecipientFirstName     502        0 502 Inf -Inf     0        0
+##    RecipientLastName     502        0 502 Inf -Inf     0        0
+##           ResponseId       0      502 502  17   17     0      502
+##               Status       0      502 502  11   11     0        1
+##         UserLanguage     502        0 502 Inf -Inf     0        0
+## 
+## ── Variable type:integer ───────────────────────────────────────────
+##               variable missing complete   n    mean   sd  p0 p25 p50 p75
+##  Duration (in seconds)       0      502 502   0.024 0.15   0   0   0   0
+##               Progress       0      502 502 100     0    100 100 100 100
+##  p100     hist
+##     1 ▇▁▁▁▁▁▁▁
+##   100 ▁▁▁▇▁▁▁▁
+## 
+## ── Variable type:numeric ───────────────────────────────────────────
+##           variable missing complete   n    mean sd      p0     p25     p50
+##   LocationLatitude       0      502 502   37.77  0   37.77   37.77   37.77
+##  LocationLongitude       0      502 502 -122.41  0 -122.41 -122.41 -122.41
+##      p75    p100     hist
+##    37.77   37.77 ▁▁▁▇▁▁▁▁
+##  -122.41 -122.41 ▁▁▁▇▁▁▁▁
+## 
+## ── Variable type:POSIXct ───────────────────────────────────────────
+##      variable missing complete   n        min        max     median
+##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##     StartDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  n_unique
+##        74
+##        74
+##        74</code></pre>
+</div>
 <div id="removing-duplicate-values" class="section level3">
-<h3><span class="header-section-number">3.2.4</span> Removing duplicate values</h3>
+<h3><span class="header-section-number">3.2.5</span> Removing duplicate values</h3>
 <p>Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn’t counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address.</p>
 <p><strong>View duplicates using janitor package</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janitor)
 
 df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_dupes</span>(IPAddress) <span class="co"># get_dupes is a function available through janitor, can use more than one column to view duplicates</span></code></pre></div>
-<pre><code>## # A tibble: 502 x 30
-##    IPAddress dupe_count StartDate           EndDate             Status    
-##    &lt;chr&gt;          &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;     
-##  1 &lt;NA&gt;             502 2019-01-15 13:28:39 2019-01-15 13:28:39 Survey Te…
-##  2 &lt;NA&gt;             502 2019-01-15 13:28:40 2019-01-15 13:28:40 Survey Te…
-##  3 &lt;NA&gt;             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te…
-##  4 &lt;NA&gt;             502 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Te…
-##  5 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-##  6 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-##  7 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-##  8 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-##  9 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-## 10 &lt;NA&gt;             502 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Te…
-## # ... with 492 more rows, and 25 more variables: Progress &lt;int&gt;, `Duration
-## #   (in seconds)` &lt;int&gt;, Finished &lt;chr&gt;, RecordedDate &lt;dttm&gt;,
-## #   ResponseId &lt;chr&gt;, RecipientLastName &lt;chr&gt;, RecipientFirstName &lt;chr&gt;,
-## #   RecipientEmail &lt;chr&gt;, ExternalReference &lt;chr&gt;, LocationLatitude &lt;dbl&gt;,
-## #   LocationLongitude &lt;dbl&gt;, DistributionChannel &lt;chr&gt;,
-## #   UserLanguage &lt;chr&gt;, Q1 &lt;chr&gt;, Q2 &lt;chr&gt;, Q3_4 &lt;chr&gt;, Q3_5 &lt;chr&gt;,
-## #   Q3_6 &lt;chr&gt;, Q3_7 &lt;chr&gt;, Q3_8 &lt;chr&gt;, Q3_9 &lt;chr&gt;, Q3_10 &lt;chr&gt;,
-## #   Q3_10_TEXT &lt;chr&gt;, Q4 &lt;chr&gt;, Q5 &lt;chr&gt;</code></pre>
 <p><strong>Manual way to view duplicates</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">u_id &lt;-<span class="st"> </span><span class="kw">quo</span>(IPAddress) <span class="co"># Store unique identifier column, can be IP address, email, etc. </span>
 

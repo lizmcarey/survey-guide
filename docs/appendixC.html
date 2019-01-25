@@ -120,7 +120,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2.1" data-path="analysis.html"><a href="analysis.html#load-the-data"><i class="fa fa-check"></i><b>3.2.1</b> Load the data</a></li>
 <li class="chapter" data-level="3.2.2" data-path="analysis.html"><a href="analysis.html#loading-qualtrics-data"><i class="fa fa-check"></i><b>3.2.2</b> Loading Qualtrics data</a></li>
 <li class="chapter" data-level="3.2.3" data-path="analysis.html"><a href="analysis.html#preview-the-data"><i class="fa fa-check"></i><b>3.2.3</b> Preview the data</a></li>
-<li class="chapter" data-level="3.2.4" data-path="analysis.html"><a href="analysis.html#removing-duplicate-values"><i class="fa fa-check"></i><b>3.2.4</b> Removing duplicate values</a></li>
+<li class="chapter" data-level="3.2.4" data-path="analysis.html"><a href="analysis.html#joining-data-sets"><i class="fa fa-check"></i><b>3.2.4</b> Joining data sets</a></li>
+<li class="chapter" data-level="3.2.5" data-path="analysis.html"><a href="analysis.html#removing-duplicate-values"><i class="fa fa-check"></i><b>3.2.5</b> Removing duplicate values</a></li>
 </ul></li>
 </ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
@@ -158,32 +159,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 email_domains &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;@gmail.com&quot;</span>, <span class="st">&quot;@hotmail.com&quot;</span>, <span class="st">&quot;@outlook.com&quot;</span>, <span class="st">&quot;@me.com&quot;</span>, <span class="st">&quot;@yahoo.com&quot;</span>)
 
-respondent_data &lt;-<span class="st"> </span><span class="kw">ch_generate</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;job&#39;</span>, <span class="st">&#39;phone_number&#39;</span>, <span class="dt">n =</span> <span class="dv">502</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                    </span><span class="kw">separate</span>(name, <span class="st">&quot;first&quot;</span>, <span class="dt">extra =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">remove=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+respondent_data &lt;-<span class="st"> </span><span class="kw">ch_generate</span>(<span class="st">&#39;name&#39;</span>, <span class="st">&#39;job&#39;</span>, <span class="st">&#39;phone_number&#39;</span>, <span class="dt">n =</span> <span class="kw">nrow</span>(df)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                    </span><span class="kw">separate</span>(name, <span class="st">&quot;first_name&quot;</span>, <span class="dt">extra =</span> <span class="st">&quot;drop&quot;</span>, <span class="dt">remove=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">                    </span><span class="kw">mutate</span>(<span class="dt">email =</span> <span class="kw">glue</span>(<span class="st">&quot;{first_lower}{email_domain}&quot;</span>, 
-                                          <span class="dt">first_lower =</span> <span class="kw">tolower</span>(first), 
-                                          <span class="dt">email_domain =</span> <span class="kw">sample</span>(email_domains, <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>) ), 
-                           <span class="dt">gender =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;prefer not to say&quot;</span>), <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.55</span>, <span class="fl">0.35</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>)), 
-                           <span class="dt">age =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Under 18&quot;</span>, <span class="st">&quot;18-34&quot;</span>, <span class="st">&quot;35-54&quot;</span>, <span class="st">&quot;55+&quot;</span>), <span class="dv">502</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.30</span>))
+                                          <span class="dt">first_lower =</span> <span class="kw">tolower</span>(first_name), 
+                                          <span class="dt">email_domain =</span> <span class="kw">sample</span>(email_domains, <span class="kw">nrow</span>(df), <span class="dt">replace=</span><span class="ot">TRUE</span>) ), 
+                           <span class="dt">gender =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;other&quot;</span>, <span class="st">&quot;prefer not to say&quot;</span>), <span class="kw">nrow</span>(df), <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span><span class="kw">c</span>(<span class="fl">0.55</span>, <span class="fl">0.35</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>)), 
+                           <span class="dt">age =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;Under 18&quot;</span>, <span class="st">&quot;18-34&quot;</span>, <span class="st">&quot;35-54&quot;</span>, <span class="st">&quot;55+&quot;</span>), <span class="kw">nrow</span>(df), <span class="dt">replace=</span><span class="ot">TRUE</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.25</span>, <span class="fl">0.40</span>, <span class="fl">0.30</span>))
         )
 
-<span class="kw">write_csv</span>(respondent_data, <span class="st">&quot;./sample_data/respondent_data.csv&quot;</span>)
+<span class="co"># add ResponseId column from survey sample</span>
+respondent_data &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(ResponseId) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">bind_cols</span>(respondent_data)
 
-respondent_data</code></pre></div>
-<pre><code>## # A tibble: 502 x 7
-##    name                    first  job     phone_number email  gender age  
-##    &lt;chr&gt;                   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;        &lt;S3: &gt; &lt;chr&gt;  &lt;chr&gt;
-##  1 Amie Corkery            Amie   Scient… 422.883.489… amie@… male   18-34
-##  2 Lori Lueilwitz          Lori   Market… 03783157690  lori@… male   55+  
-##  3 Christoper Lynch-Klocko Chris… Buyer,… 101-007-6946 chris… male   18-34
-##  4 Dr. Arba Muller         Dr     Chief … 313.885.8261 dr@gm… male   55+  
-##  5 Zelpha Schulist         Zelpha Food t… (216)648-01… zelph… male   18-34
-##  6 Marybelle Anderson      Maryb… Amenit… 944.810.024… maryb… female 55+  
-##  7 Artis Mayert            Artis  Contra… (782)046-17… artis… male   55+  
-##  8 Miriah Schuster         Miriah Exerci… 204.650.8691 miria… male   55+  
-##  9 Nena Becker             Nena   Agricu… 003.654.3843 nena@… male   18-34
-## 10 Dr. Asberry Klocko      Dr     Chemis… 1-444-642-9… dr@ya… male   55+  
-## # ... with 492 more rows</code></pre>
+<span class="kw">write_csv</span>(respondent_data, <span class="st">&quot;./sample_data/respondent_data.csv&quot;</span>) <span class="co"># Store data in sample_data folder</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(respondent_data)</code></pre></div>
+<pre><code>## Skim summary statistics
+##  n obs: 502 
+##  n variables: 8 
+## 
+## ── Variable type:character ─────────────────────────────────────────
+##      variable missing complete   n min max empty n_unique
+##           age       0      502 502   3   8     0        4
+##         email       0      502 502   9  22     0      410
+##    first_name       0      502 502   2  10     0      377
+##        gender       0      502 502   4  17     0        4
+##           job       0      502 502   3  59     0      345
+##          name       0      502 502   8  27     0      502
+##  phone_number       0      502 502  11  20     0      502
+##    ResponseId       0      502 502  17  17     0      502</code></pre>
 
 </div>
             </section>
