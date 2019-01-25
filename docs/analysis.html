@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-17">
+<meta name="date" content="2019-01-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -196,12 +196,13 @@ folder_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class
 <h3><span class="header-section-number">3.2.1</span> Load the data</h3>
 <p>Download your raw survey data as a csv and load it into your your analysis tool of choice (e.g. Ipython notebook or Rstudio)</p>
 <p><strong>R version</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary packages for analysis</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load necessary packages for analysis</span>
 <span class="kw">library</span>(tidyverse)        <span class="co">#contains all the library packages to manipulate and transform data</span>
 <span class="kw">library</span>(summarytools)     <span class="co">#shortcut tools to visualize summaries of the data</span>
 
-<span class="co">#read/store the data as the variable df (short for dataframe)</span>
-<span class="co">#replace &quot;file&quot; with &quot;https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv&quot; to download the survey data set</span>
+<span class="co"># read/store the data as the variable df (short for dataframe)</span>
+<span class="co"># replace &quot;file&quot; with &quot;https://raw.githubusercontent.com/lizmcarey/survey-guide/master/sample_data/Survey_test_data.csv&quot; to download the survey data set</span>
+file &lt;-<span class="st"> &quot;./sample_data/Survey_test_data.csv&quot;</span> <span class="co">#load file from folder heirarchy </span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file)</code></pre></div>
 <p><strong>python version</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#load necessary modules for analysis</span>
@@ -214,18 +215,18 @@ df =<span class="st"> </span><span class="kw">pd.read_csv</span>(filename)</code
 <h3><span class="header-section-number">3.2.2</span> Loading Qualtrics data</h3>
 <p>When you download a csv from Qualtrics, it will come with a few extra rows you don’t need. Here are some automated scripts you can add to your makefile to speed up your workflow</p>
 <p><strong>R version manual</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Store the column names by reading in the column header</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Store the column names by reading in the column header</span>
 df_names &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()
 
-<span class="co">#Read the entire file,</span>
+<span class="co"># Read the entire file</span>
 df &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, 
-               <span class="dt">col_names =</span> df_names, <span class="co">#use df_names to title the columns</span>
-               <span class="dt">skip =</span> <span class="dv">3</span>) <span class="co">#skip the first three lines</span>
+               <span class="dt">col_names =</span> df_names, <span class="co"># use df_names to title the columns</span>
+               <span class="dt">skip =</span> <span class="dv">3</span>)             <span class="co"># skip the first three lines</span>
 
 <span class="co">#store the question names</span>
-question_bank &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#read in the first row of file</span>
-<span class="st">                 </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#select columns that start with Q</span>
-<span class="st">                 </span><span class="kw">gather</span>(key, question_text) <span class="co">#move data from wide to long</span></code></pre></div>
+question_bank &lt;-<span class="st"> </span><span class="kw">read_csv</span>(file, <span class="dt">n_max=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># read in the first row of the file</span>
+<span class="st">                 </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Q&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># select columns that start with Q</span>
+<span class="st">                 </span><span class="kw">gather</span>(key, question_text)   <span class="co"># transform data from wide to long</span></code></pre></div>
 <p><strong>R version programmatic</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#function to load qualtrics csv and remove extra rows</span>
 load_qualtrics_csv &lt;-<span class="st"> </span><span class="cf">function</span>(file) {
@@ -249,7 +250,98 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 </div>
 <div id="preview-the-data" class="section level3">
 <h3><span class="header-section-number">3.2.3</span> Preview the data</h3>
-<p>It’s important to get a look at the data to spot an errors in uploading, etc.</p>
+<p>It’s important to get a look at the data to spot any errors in uploading the dataset and the validity of the responses.</p>
+<p>You’ll want to check for:</p>
+<ul>
+<li>Total number of observations/rows</li>
+<li>Duplicate responses</li>
+<li>Drop off/Abandon rate of the survey</li>
+<li>Average survey completion time</li>
+<li>“Speeders:” those who couldn’t have completed the survey in a reasonable amount of time</li>
+</ul>
+<hr />
+<p>There are multiple different ways to preview your dataset before analysis. One quick way is to check the first few rows of your data. You can do this with the function <code>head()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Check the first 5 rows of data</span>
+<span class="kw">head</span>(df)</code></pre></div>
+<pre><code>## # A tibble: 6 x 29
+##   StartDate           EndDate             Status      IPAddress Progress
+##   &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;       &lt;chr&gt;        &lt;int&gt;
+## 1 2019-01-15 13:28:39 2019-01-15 13:28:39 Survey Test &lt;NA&gt;           100
+## 2 2019-01-15 13:28:40 2019-01-15 13:28:40 Survey Test &lt;NA&gt;           100
+## 3 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Test &lt;NA&gt;           100
+## 4 2019-01-15 13:36:47 2019-01-15 13:36:47 Survey Test &lt;NA&gt;           100
+## 5 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Test &lt;NA&gt;           100
+## 6 2019-01-15 13:36:48 2019-01-15 13:36:48 Survey Test &lt;NA&gt;           100
+## # ... with 24 more variables: `Duration (in seconds)` &lt;int&gt;,
+## #   Finished &lt;chr&gt;, RecordedDate &lt;dttm&gt;, ResponseId &lt;chr&gt;,
+## #   RecipientLastName &lt;chr&gt;, RecipientFirstName &lt;chr&gt;,
+## #   RecipientEmail &lt;chr&gt;, ExternalReference &lt;chr&gt;, LocationLatitude &lt;dbl&gt;,
+## #   LocationLongitude &lt;dbl&gt;, DistributionChannel &lt;chr&gt;,
+## #   UserLanguage &lt;chr&gt;, Q1 &lt;chr&gt;, Q2 &lt;chr&gt;, Q3_4 &lt;chr&gt;, Q3_5 &lt;chr&gt;,
+## #   Q3_6 &lt;chr&gt;, Q3_7 &lt;chr&gt;, Q3_8 &lt;chr&gt;, Q3_9 &lt;chr&gt;, Q3_10 &lt;chr&gt;,
+## #   Q3_10_TEXT &lt;chr&gt;, Q4 &lt;chr&gt;, Q5 &lt;chr&gt;</code></pre>
+<hr />
+<p>A more comprehensive way to view your dataset is with the <code>skimr</code> package. This package will give an overview of the number of observations and variables in your data.</p>
+<p>The missing column should not be greater than 20% than your total number of observations (unless it’s a multiselect question). Questions with dropoff greater than 20% can signal the question was difficult for respondents to answer; you should be wary of response bias and consider removing the question from analysis and consider rewording the question</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
+<span class="kw">skim</span>(df)</code></pre></div>
+<pre><code>## Skim summary statistics
+##  n obs: 502 
+##  n variables: 29 
+## 
+## ── Variable type:character ───────────────────────────────────────────────────────────────
+##             variable missing complete   n min  max empty n_unique
+##  DistributionChannel       0      502 502   4    4     0        1
+##    ExternalReference     502        0 502 Inf -Inf     0        0
+##             Finished       0      502 502   4    4     0        1
+##            IPAddress     502        0 502 Inf -Inf     0        0
+##                   Q1       0      502 502   5   14     0        6
+##                   Q2       0      502 502  18   34     0        5
+##                Q3_10     184      318 502   5    5     0        1
+##           Q3_10_TEXT     184      318 502  51  135     0      318
+##                 Q3_4     201      301 502  26   26     0        1
+##                 Q3_5     165      337 502  22   22     0        1
+##                 Q3_6     174      328 502  21   21     0        1
+##                 Q3_7     172      330 502  19   19     0        1
+##                 Q3_8     184      318 502  18   18     0        1
+##                 Q3_9     162      340 502  23   23     0        1
+##                   Q4       0      502 502  11   22     0        7
+##                   Q5       0      502 502  53  134     0      502
+##       RecipientEmail     502        0 502 Inf -Inf     0        0
+##   RecipientFirstName     502        0 502 Inf -Inf     0        0
+##    RecipientLastName     502        0 502 Inf -Inf     0        0
+##           ResponseId       0      502 502  17   17     0      502
+##               Status       0      502 502  11   11     0        1
+##         UserLanguage     502        0 502 Inf -Inf     0        0
+## 
+## ── Variable type:integer ─────────────────────────────────────────────────────────────────
+##               variable missing complete   n    mean   sd  p0 p25 p50 p75
+##  Duration (in seconds)       0      502 502   0.024 0.15   0   0   0   0
+##               Progress       0      502 502 100     0    100 100 100 100
+##  p100     hist
+##     1 ▇▁▁▁▁▁▁▁
+##   100 ▁▁▁▇▁▁▁▁
+## 
+## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
+##           variable missing complete   n    mean sd      p0     p25     p50
+##   LocationLatitude       0      502 502   37.77  0   37.77   37.77   37.77
+##  LocationLongitude       0      502 502 -122.41  0 -122.41 -122.41 -122.41
+##      p75    p100     hist
+##    37.77   37.77 ▁▁▁▇▁▁▁▁
+##  -122.41 -122.41 ▁▁▁▇▁▁▁▁
+## 
+## ── Variable type:POSIXct ─────────────────────────────────────────────────────────────────
+##      variable missing complete   n        min        max     median
+##       EndDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  RecordedDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##     StartDate       0      502 502 2019-01-15 2019-01-15 2019-01-15
+##  n_unique
+##        74
+##        74
+##        74</code></pre>
+<p>Another package that can give a brief overview of your data is <code>summarytools</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(summarytools)
+<span class="kw">view</span>(<span class="kw">dfSummary</span>(df)) <span class="co"># use view lowercase to see html output in the Viewer pane</span></code></pre></div>
 
 </div>
 </div>

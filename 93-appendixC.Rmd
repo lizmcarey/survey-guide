@@ -1,0 +1,22 @@
+# Generating fake data {#appendixC}
+
+Here's the code I used to create the respondent information table 
+```{r message=FALSE, warning=FALSE}
+library(charlatan) # library of fake data
+library(glue) # Library for pasting together variables
+
+email_domains <- c("@gmail.com", "@hotmail.com", "@outlook.com", "@me.com", "@yahoo.com")
+
+respondent_data <- ch_generate('name', 'job', 'phone_number', n = 502) %>% 
+                    separate(name, "first", extra = "drop", remove=FALSE) %>% 
+                    mutate(email = glue("{first_lower}{email_domain}", 
+                                          first_lower = tolower(first), 
+                                          email_domain = sample(email_domains, 502, replace=TRUE) ), 
+                           gender = sample(c("male", "female", "prefer not to say"), 502, replace=TRUE, prob=c(0.60, 0.35, 0.05)), 
+                           age = sample(c("Under 18", "18-34", "35-54", "55+"), 502, replace=TRUE, prob = c(0.05, 0.25, 0.40, 0.30))
+        )
+
+write_csv(respondent_data, "./sample_data/respondent_data.csv")
+
+respondent_data
+```
