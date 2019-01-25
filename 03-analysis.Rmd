@@ -165,22 +165,68 @@ Another package that can give a brief overview of your data is `summarytools`
 library(summarytools)
 view(dfSummary(df)) # use view lowercase to see html output in the Rstudio viewer pane
 ```
+### Joining data sets
+
+Sometimes the data you need lives in two tables. `dplyr` from the `tidyverse` package makes it easy to join your data sets together. In order to join two tables together, you'll need a shared unique identifier across the two tables. 
+
+Below are all the ways you can join two data sets using R and the corresponding `dplyr` functions. 
+
+
+![](figs/combine_datasets.png)
+
+
+You can view this image and additional ways to transform data sets on the [RStudio Data Wrangling Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf).  
+
+In [Appendix C](#appendixC), I've generated a fake dataset with corresponding ResponseId's that match to the survey data set (df).  
+
+Below I use a left join to merge respondent data table with the survey data table. 
+
+```{r, message=FALSE, warning=FALSE, results="hide", echo=FALSE}
+library(charlatan) # library of fake data
+library(glue) # library for pasting together variables
+
+email_domains <- c("@gmail.com", "@hotmail.com", "@outlook.com", "@me.com", "@yahoo.com")
+
+respondent_data <- ch_generate('name', 'job', 'phone_number', n = nrow(df)) %>% 
+                    separate(name, "first_name", extra = "drop", remove=FALSE) %>% 
+                    mutate(email = glue("{first_lower}{email_domain}", 
+                                          first_lower = tolower(first_name), 
+                                          email_domain = sample(email_domains, nrow(df), replace=TRUE) ), 
+                           gender = sample(c("male", "female", "other", "prefer not to say"), nrow(df), replace=TRUE, prob=c(0.55, 0.35, 0.05, 0.05)), 
+                           age = sample(c("Under 18", "18-34", "35-54", "55+"), nrow(df), replace=TRUE, prob = c(0.05, 0.25, 0.40, 0.30))
+        )
+
+# add ResponseId column from survey sample
+respondent_data <- df %>% select(ResponseId) %>% 
+  bind_cols(respondent_data)
+
+write_csv(respondent_data, "./sample_data/respondent_data.csv") # Store data in sample_data folder
+```
+
+
+```{r, message=FALSE, warning=FALSE}
+df <- df %>% left_join(respondent_data, by = c("ResponseId" = "ResponseId"))
+
+# View merged data sets
+skim(df)
+```
+
 
 ### Removing duplicate values
  
 Respondents may come back to the survey, or try to take the survey a second time on a new device. To ensure a respondent isn't counted more than once in a survey, be sure to check for duplicate values by using a unique identifier. Common unique indentifiers include: email, embedded user id, or IP address. 
 
 **View duplicates using janitor package** 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(janitor)
 
-df %>% get_dupes(IPAddress) # get_dupes is a function available through janitor, can use more than one column to view duplicates
+df %>% get_dupes(email) # get_dupes is a function available through janitor, can use more than one column to view duplicates
 
 ```
 
 **Manual way to view duplicates**
 ```{r message=FALSE, warning=FALSE}
-u_id <- quo(IPAddress) # Store unique identifier column, can be IP address, email, etc. 
+u_id <- quo(email) # Store unique identifier column, can be IP address, email, etc. 
 
 df %>% group_by(!!u_id) %>% 
        tally() %>% 
@@ -200,5 +246,6 @@ df <- df %>%
   slice(which.max(EndDate)) %>% 
   ungroup() 
 ```
+
 
 
