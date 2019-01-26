@@ -129,7 +129,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{2019-01-25}
+    \date{2019-01-26}
 
 \usepackage{booktabs}
 
@@ -524,11 +524,11 @@ Below I use a left join to merge respondent data table with the survey data tabl
 ##             variable missing complete   n min max empty n_unique
 ##                  age       0      502 502   3   8     0        4
 ##  DistributionChannel       0      502 502   4   4     0        1
-##                email       0      502 502   9  21     0      407
-##           first_name       0      502 502   2  10     0      377
+##                email       0      502 502   9  23     0      405
+##           first_name       0      502 502   2  11     0      373
 ##               gender       0      502 502   4  17     0        4
-##                  job       0      502 502   3  53     0      358
-##                 name       0      502 502   8  28     0      502
+##                  job       0      502 502   4  59     0      346
+##                 name       0      502 502   7  27     0      502
 ##         phone_number       0      502 502  11  20     0      502
 ##                   Q1       0      502 502   5  14     0        6
 ##                   Q2       0      502 502  18  34     0        5
@@ -594,20 +594,20 @@ Respondents may come back to the survey, or try to take the survey a second time
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 120 x 37
+## # A tibble: 122 x 37
 ##    email dupe_count StartDate           EndDate             Status
 ##    <S3:>      <int> <dttm>              <dttm>              <chr> 
-##  1 ales~          2 2019-01-15 13:37:31 2019-01-15 13:37:31 Surve~
-##  2 ales~          2 2019-01-15 13:37:54 2019-01-15 13:37:54 Surve~
-##  3 dr@g~          9 2019-01-15 13:37:02 2019-01-15 13:37:02 Surve~
-##  4 dr@g~          9 2019-01-15 13:37:05 2019-01-15 13:37:05 Surve~
-##  5 dr@g~          9 2019-01-15 13:37:07 2019-01-15 13:37:07 Surve~
-##  6 dr@g~          9 2019-01-15 13:37:12 2019-01-15 13:37:12 Surve~
-##  7 dr@g~          9 2019-01-15 13:37:26 2019-01-15 13:37:26 Surve~
-##  8 dr@g~          9 2019-01-15 13:37:26 2019-01-15 13:37:26 Surve~
-##  9 dr@g~          9 2019-01-15 13:37:36 2019-01-15 13:37:36 Surve~
-## 10 dr@g~          9 2019-01-15 13:37:54 2019-01-15 13:37:54 Surve~
-## # ... with 110 more rows, and 32 more variables: IPAddress <lgl>,
+##  1 dr@g~         13 2019-01-15 13:36:53 2019-01-15 13:36:53 Surve~
+##  2 dr@g~         13 2019-01-15 13:36:59 2019-01-15 13:36:59 Surve~
+##  3 dr@g~         13 2019-01-15 13:37:01 2019-01-15 13:37:01 Surve~
+##  4 dr@g~         13 2019-01-15 13:37:09 2019-01-15 13:37:09 Surve~
+##  5 dr@g~         13 2019-01-15 13:37:21 2019-01-15 13:37:21 Surve~
+##  6 dr@g~         13 2019-01-15 13:37:21 2019-01-15 13:37:21 Surve~
+##  7 dr@g~         13 2019-01-15 13:37:23 2019-01-15 13:37:23 Surve~
+##  8 dr@g~         13 2019-01-15 13:37:24 2019-01-15 13:37:24 Surve~
+##  9 dr@g~         13 2019-01-15 13:37:25 2019-01-15 13:37:25 Surve~
+## 10 dr@g~         13 2019-01-15 13:37:27 2019-01-15 13:37:27 Surve~
+## # ... with 112 more rows, and 32 more variables: IPAddress <lgl>,
 ## #   Progress <dbl>, `Duration (in seconds)` <dbl>, Finished <lgl>,
 ## #   RecordedDate <dttm>, ResponseId <chr>, RecipientLastName <lgl>,
 ## #   RecipientFirstName <lgl>, RecipientEmail <lgl>,
@@ -633,18 +633,18 @@ Respondents may come back to the survey, or try to take the survey a second time
 
 \begin{verbatim}
 ## # A tibble: 25 x 2
-##    email                 n
-##    <S3: glue>        <int>
-##  1 alessandra@me.com     2
-##  2 dr@gmail.com          9
-##  3 dr@hotmail.com        9
-##  4 dr@me.com             7
-##  5 dr@outlook.com       10
-##  6 dr@yahoo.com          8
-##  7 ingeborg@me.com       2
-##  8 miss@gmail.com        4
-##  9 miss@hotmail.com      5
-## 10 miss@me.com           3
+##    email                  n
+##    <S3: glue>         <int>
+##  1 dr@gmail.com          13
+##  2 dr@hotmail.com         6
+##  3 dr@me.com             11
+##  4 dr@outlook.com        12
+##  5 dr@yahoo.com          11
+##  6 hope@yahoo.com         2
+##  7 lauren@outlook.com     2
+##  8 miss@me.com            5
+##  9 miss@outlook.com       3
+## 10 miss@yahoo.com         2
 ## # ... with 15 more rows
 \end{verbatim}
 
@@ -746,11 +746,11 @@ Here's the code I used to create the respondent information table
 ## -- Variable type:character ------------------------------------------------
 ##      variable missing complete   n min max empty n_unique
 ##           age       0      502 502   3   8     0        4
-##         email       0      502 502   9  21     0      407
-##    first_name       0      502 502   2  10     0      377
+##         email       0      502 502   9  23     0      405
+##    first_name       0      502 502   2  11     0      373
 ##        gender       0      502 502   4  17     0        4
-##           job       0      502 502   3  53     0      358
-##          name       0      502 502   8  28     0      502
+##           job       0      502 502   4  59     0      346
+##          name       0      502 502   7  27     0      502
 ##  phone_number       0      502 502  11  20     0      502
 ##    ResponseId       0      502 502  17  17     0      502
 \end{verbatim}

@@ -25,7 +25,7 @@
 <meta name="author" content="Liz Carey (and hopefully many others)">
 
 
-<meta name="date" content="2019-01-25">
+<meta name="date" content="2019-01-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -395,11 +395,11 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 ##             variable missing complete   n min max empty n_unique
 ##                  age       0      502 502   3   8     0        4
 ##  DistributionChannel       0      502 502   4   4     0        1
-##                email       0      502 502   9  23     0      408
-##           first_name       0      502 502   2  11     0      385
+##                email       0      502 502   9  21     0      404
+##           first_name       0      502 502   2   9     0      379
 ##               gender       0      502 502   4  17     0        4
-##                  job       0      502 502   3  59     0      344
-##                 name       0      502 502   8  28     0      502
+##                  job       0      502 502   4  49     0      351
+##                 name       0      502 502   7  28     0      502
 ##         phone_number       0      502 502  11  20     0      502
 ##                   Q1       0      502 502   5  14     0        6
 ##                   Q2       0      502 502  18  34     0        5
@@ -455,20 +455,20 @@ question_bank &lt;-<span class="st"> </span><span class="kw">get_questions</span
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janitor)
 
 df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_dupes</span>(email) <span class="co"># get_dupes is a function available through janitor, can use more than one column to view duplicates</span></code></pre>
-<pre><code>## # A tibble: 119 x 37
+<pre><code>## # A tibble: 120 x 37
 ##    email dupe_count StartDate           EndDate             Status
 ##    &lt;S3:&gt;      &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt; 
-##  1 conn…          2 2019-01-15 13:37:05 2019-01-15 13:37:05 Surve…
-##  2 conn…          2 2019-01-15 13:37:13 2019-01-15 13:37:13 Surve…
-##  3 dr@g…          7 2019-01-15 13:36:48 2019-01-15 13:36:48 Surve…
-##  4 dr@g…          7 2019-01-15 13:36:57 2019-01-15 13:36:57 Surve…
-##  5 dr@g…          7 2019-01-15 13:37:10 2019-01-15 13:37:10 Surve…
-##  6 dr@g…          7 2019-01-15 13:37:11 2019-01-15 13:37:11 Surve…
-##  7 dr@g…          7 2019-01-15 13:37:17 2019-01-15 13:37:17 Surve…
-##  8 dr@g…          7 2019-01-15 13:37:34 2019-01-15 13:37:34 Surve…
-##  9 dr@g…          7 2019-01-15 13:37:38 2019-01-15 13:37:38 Surve…
-## 10 dr@h…          9 2019-01-15 13:37:00 2019-01-15 13:37:00 Surve…
-## # … with 109 more rows, and 32 more variables: IPAddress &lt;lgl&gt;,
+##  1 dr@g…         10 2019-01-15 13:36:52 2019-01-15 13:36:52 Surve…
+##  2 dr@g…         10 2019-01-15 13:36:53 2019-01-15 13:36:53 Surve…
+##  3 dr@g…         10 2019-01-15 13:36:54 2019-01-15 13:36:54 Surve…
+##  4 dr@g…         10 2019-01-15 13:37:06 2019-01-15 13:37:06 Surve…
+##  5 dr@g…         10 2019-01-15 13:37:23 2019-01-15 13:37:23 Surve…
+##  6 dr@g…         10 2019-01-15 13:37:26 2019-01-15 13:37:26 Surve…
+##  7 dr@g…         10 2019-01-15 13:37:28 2019-01-15 13:37:28 Surve…
+##  8 dr@g…         10 2019-01-15 13:37:29 2019-01-15 13:37:29 Surve…
+##  9 dr@g…         10 2019-01-15 13:37:34 2019-01-15 13:37:34 Surve…
+## 10 dr@g…         10 2019-01-15 13:37:58 2019-01-15 13:37:58 Surve…
+## # … with 110 more rows, and 32 more variables: IPAddress &lt;lgl&gt;,
 ## #   Progress &lt;dbl&gt;, `Duration (in seconds)` &lt;dbl&gt;, Finished &lt;lgl&gt;,
 ## #   RecordedDate &lt;dttm&gt;, ResponseId &lt;chr&gt;, RecipientLastName &lt;lgl&gt;,
 ## #   RecipientFirstName &lt;lgl&gt;, RecipientEmail &lt;lgl&gt;,
@@ -484,20 +484,20 @@ df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">get_d
 df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(<span class="op">!!</span>u_id) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">       </span><span class="kw">tally</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">       </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)</code></pre>
-<pre><code>## # A tibble: 25 x 2
-##    email                  n
-##    &lt;S3: glue&gt;         &lt;int&gt;
-##  1 connie@outlook.com     2
-##  2 dr@gmail.com           7
-##  3 dr@hotmail.com         9
-##  4 dr@me.com             11
-##  5 dr@outlook.com        13
-##  6 dr@yahoo.com           8
-##  7 miss@gmail.com         2
-##  8 miss@hotmail.com       2
-##  9 miss@me.com            2
-## 10 miss@outlook.com       3
-## # … with 15 more rows</code></pre>
+<pre><code>## # A tibble: 22 x 2
+##    email                n
+##    &lt;S3: glue&gt;       &lt;int&gt;
+##  1 dr@gmail.com        10
+##  2 dr@hotmail.com      13
+##  3 dr@me.com           10
+##  4 dr@outlook.com       8
+##  5 dr@yahoo.com         7
+##  6 gannon@me.com        2
+##  7 miss@hotmail.com     2
+##  8 miss@outlook.com     5
+##  9 miss@yahoo.com       6
+## 10 mr@gmail.com         5
+## # … with 12 more rows</code></pre>
 <p>You’ll want to remove duplicate responses, and keep the most recent response.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate) <span class="co"># load library for converting datetimes</span>
 
