@@ -52,13 +52,14 @@ We developed this book in the hopes of future collaboration among other UX resea
 ## Outline {-}
 The content of the book will include:  
 
- * **Chapter 1**
- * **Chapter 2**
+ * **Chapter 1**: Designing a survey
+ * **Chapter 2**: Writing effective survey questions
+ * **Chapter 3**: Survey Analysis
  
 ## Prerequisites {-}
 
-All you need is an interest in conducting survey research and basic data analysis, we'll include code snippets (python and R) along the way. 
+All you need is an interest in conducting survey research and basic data analysis. I'll include snippets of R code to perform the analysis along the way, but if you want a more in-depth primer on R, feel free to check out this [Intro to R workshop](https://github.com/lizmcarey/intro_to_r_workshop) I've adapted from Amelia McNamara's [R Workshop](https://github.com/AmeliaMN/IntroToR/blob/master/README.md)
  
 ## Acknowledgements {-}
 
-This book wouldn't be possible without the contributions of: 
+This book wouldn't be possible without the contributions of: TBD
