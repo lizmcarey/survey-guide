@@ -1,17 +1,30 @@
+# Cognitive Response Model
+
+Before drafting your questions, it's helpful to understand how respondents think when answering a survey.  
+
+The following is a 4-stage cognitive model developed by 
+
+> **1. Comprehension:** Understanding the task and question  
+> **2. Retrieval of information:** Recalling information from memory, bringing information into consciousness, explicit memory   
+> **3. Judgment or estimation:** Combining, supplementing,
+extrapolating from information that has been retrieved  
+> **4. Selection of a response to the question**    
+
+
 # Writing effective survey questions
 
 Effective survey questions result in **consistent** and **reliable** responses.
 
 The following are tips from Jon A. Krosnick and Stanley Presser on how to write effective survey questions [@handbook_survey_research]:  
 
-1. Use simple, familiar words (avoid technical terms, jargon, and slang);  
-2. Use simple syntax;  
-3. Avoid words with ambiguous meanings, i.e., aim for wording that all respondents will interpret in the same way;    
-4. Strive for wording that is specific and concrete (as opposed to general and abstract);  
-5. Make response options exhaustive and mutually exclusive;  
-6. Avoid leading or loaded questions that push respondents toward an answer;  
-7. Ask about one thing at a time (avoid double-barreled questions); and  
-8. Avoid questions with single or double negations. 
+1. Use simple, familiar words (avoid technical terms, jargon, and slang)  
+2. Use simple syntax  
+3. Avoid words with ambiguous meanings, i.e., aim for wording that all respondents will interpret in the same way    
+4. Strive for wording that is specific and concrete (as opposed to general and abstract)  
+5. Make response options exhaustive and mutually exclusive  
+6. Avoid leading or loaded questions that push respondents toward an answer  
+7. Ask about one thing at a time (avoid double-barreled questions) and  
+8. Avoid questions with single or double negations 
 
 How to optimize question ordering [@handbook_survey_research]:  
 
