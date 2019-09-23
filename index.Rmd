@@ -47,10 +47,10 @@ This book is intended to be a quick resource for conducting survey research. By 
 
 Hopefully you'll find this book to be a condensed and easy to read resource on survey research.
 
-We developed this book in the hopes of future collaboration among other UX researchers. 
+I developed this book in the hopes of future collaboration among other UX researchers. 
 
 ## Outline {-}
-Inside this book you'll find: 
+Inside this book you'll find resources on: 
 
  * **Chapter 1**: Designing a survey
  * **Chapter 2**: Writing effective survey questions
