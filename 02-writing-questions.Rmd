@@ -11,7 +11,7 @@ extrapolating from information that has been retrieved
 > **4. Selection of a response to the question**    
 
 
-# Writing effective survey questions
+## Writing effective survey questions
 
 Effective survey questions result in **consistent** and **reliable** responses.
 
