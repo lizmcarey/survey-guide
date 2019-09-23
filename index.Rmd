@@ -50,7 +50,7 @@ Hopefully you'll find this book to be a condensed and easy to read resource on s
 We developed this book in the hopes of future collaboration among other UX researchers. 
 
 ## Outline {-}
-The content of the book will include:  
+Inside this book you'll find: 
 
  * **Chapter 1**: Designing a survey
  * **Chapter 2**: Writing effective survey questions

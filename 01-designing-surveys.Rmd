@@ -15,11 +15,11 @@ knitr::include_graphics("figs/nng_ux_methods_chart2.png")
 ```
 
 
-Surveys are great for answering the "How many and how much" of what people do and say; surveys are not the best method at understanding the "Why and how to fix" a product problem. 
+Surveys are great for answering the **"How many and how much"** of what people do and say; surveys are not the best method at understanding the "Why and how to fix" a product problem. 
 
 
 ![](figs/nng_ux_methods_chart.png)
 
 ## Who are you studying? 
 
-This question may be simple at first, but when you start to narrow down 
+Once you've determined your research goal, it's important to determine your target audience. 

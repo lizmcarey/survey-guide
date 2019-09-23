@@ -2,4 +2,14 @@
 
 Effective survey questions result in **consistent** and **reliable** responses.
 
-Surveys are NOT a shortcut for usability tests
+The following are tips from Jon A. Krosnick and Stanley Presser on how to write effective survey questions [@handbook_survey_research]:  
+
+1. Use simple, familiar words (avoid technical terms, jargon, and slang);  
+2. Use simple syntax;  
+3. Avoid words with ambiguous meanings, i.e., aim for wording that all respondents  
+will interpret in the same way;  
+4. Strive for wording that is specific and concrete (as opposed to general and abstract);  
+5. Make response options exhaustive and mutually exclusive;  
+6. Avoid leading or loaded questions that push respondents toward an answer;  
+7. Ask about one thing at a time (avoid double-barreled questions); and  
+8. Avoid questions with single or double negations.  
