@@ -1,6 +1,10 @@
+tab:unnamed-chunk-8
+tab:unnamed-chunk-11
+tab:unnamed-chunk-18
 macro
 choosing-a-research-method
-who-are-you-studying
+selecting-your-target-population
+total-survey-error-framework
 writing-effective-survey-questions
 cognitive-response-model
 comprehension
@@ -19,5 +23,3 @@ appendixA
 package-installation
 appendixB
 appendixC
-selecting-your-target-population
-total-survey-error-framework
